@@ -63,7 +63,7 @@ const FormLabel = React.forwardRef(({ className, ...props }, ref) => {
   return (
     (<Label
       ref={ref}
-      className={cn(error && "text-destructive", className)}
+      className={cn(className)}
       htmlFor={formItemId}
       {...props} />)
   );
@@ -77,6 +77,7 @@ const FormControl = React.forwardRef(({ ...props }, ref) => {
     (<Slot
       ref={ref}
       id={formItemId}
+      className={cn(error && 'border border-destructive')}
       aria-describedby={
         !error
           ? `${formDescriptionId}`
