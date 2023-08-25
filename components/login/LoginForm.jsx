@@ -14,10 +14,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LoginFormSchema } from '@/validations/loginForm';
+import Link from 'next/link';
 
-
-
-export default function LoginForm() {
+export default function LoginForm({isRecoveryMode, setIsRecoveryMode}) {
   const form = useForm({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -25,7 +24,7 @@ export default function LoginForm() {
       password: '',
       remember_me: false,
     },
-    shouldFocusError: false
+    shouldFocusError: false,
   });
 
   function onSubmit(values) {
@@ -69,29 +68,34 @@ export default function LoginForm() {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="remember_me"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <div className="flex items-center space-x-2 w-full">
-                  <Checkbox
-                    id="remember-me"
-                    {...field}
-                    onCheckedChange={field.onChange}
-                  />
-                  <label
-                    htmlFor="remember-me"
-                    className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold"
-                  >
-                    Recuérdame
-                  </label>
-                </div>
-              </FormItem>
-            )}
-          />
-          <div className='w-full md:absolute md:bottom-0 md:left-0'>
-            <Button type="submit" className="w-full" >
+          <div className="flex w-full items-center justify-between mt-6">
+            <FormField
+              control={form.control}
+              name="remember_me"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <div className="flex items-center space-x-2 w-full">
+                    <Checkbox
+                      id="remember-me"
+                      {...field}
+                      onCheckedChange={field.onChange}
+                    />
+                    <label
+                      htmlFor="remember-me"
+                      className="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 font-semibold"
+                    >
+                      Recuérdame
+                    </label>
+                  </div>
+                </FormItem>
+              )}
+            />
+            <p onClick={() => setIsRecoveryMode(true)} className="text-xs text-primary font-semibold hover:underline w-full text-right cursor-pointer">
+              ¿Olvidaste tu contraseña?
+            </p>
+          </div>
+          <div className="w-full md:absolute md:bottom-0 md:left-0">
+            <Button type="submit" className="w-full">
               Enviar
             </Button>
           </div>

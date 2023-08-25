@@ -1,11 +1,14 @@
 'use client';
 
 import LoginForm from '@/components/login/LoginForm';
+import PasswordRecoveryForm from '@/components/password-recovery/PasswordRecoveryForm';
 import RegisterForm from '@/components/register/RegisterForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function SessionPage() {
+  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
 
   return (
     <div className="full-container flex items-start md:items-center justify-center">
@@ -16,13 +19,26 @@ export default function SessionPage() {
             alt="cteen-logo"
           />
         </div>
-        <Tabs defaultValue="login" className="flex flex-col flex-grow h-full items-center justify-start max-w-sm w-full md:max-w-[550px] p-2">
+        <Tabs
+          defaultValue="login"
+          className="flex flex-col flex-grow h-full items-center justify-start max-w-sm w-full md:max-w-[550px] p-2"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="login">Iniciar Sesión</TabsTrigger>
             <TabsTrigger value="signup">Registrarse</TabsTrigger>
           </TabsList>
           <TabsContent value="login">
-            <LoginForm />
+            {isRecoveryMode ? (
+              <PasswordRecoveryForm
+                isRecoveryMode={isRecoveryMode}
+                setIsRecoveryMode={setIsRecoveryMode}
+              />
+            ) : (
+              <LoginForm
+                isRecoveryMode={isRecoveryMode}
+                setIsRecoveryMode={setIsRecoveryMode}
+              />
+            )}
           </TabsContent>
           <TabsContent value="signup">
             <RegisterForm />

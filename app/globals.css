@@ -55,7 +55,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border box-border;
   }
   body {
     @apply bg-background text-foreground;
@@ -63,7 +63,16 @@
 }
 
 @layer components {
+  .min-h-screen-navbar {
+    min-height: calc(100vh - 70px);
+  }
   .full-container {
-    @apply max-w-[1300px] w-full max-h-screen md:min-h-screen mx-auto h-full px-4;
+    @apply max-w-[1300px] w-full max-h-screen md:min-h-screen-navbar mx-auto h-full px-4;
+  }
+  .navbar-link-desktop {
+    @apply text-base font-medium text-[#666] hover:text-primary hover:transition-all hover:ease-in-out hover:duration-500 after:content-[""] after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:bg-primary after:transition-all after:ease-in-out after:duration-500 after:-translate-x-[101%] overflow-hidden after:hover:translate-x-0;
+  }
+  .navbar-link-desktop-active {
+    @apply text-base text-primary font-medium after:content-[""] after:absolute after:-bottom-0 after:left-0 after:h-[3px] after:w-full after:bg-primary after:transition-all after:ease-in-out after:duration-500;
   }
 }
