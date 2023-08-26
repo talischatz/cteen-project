@@ -15,7 +15,7 @@ export default function RootLayout({ children }) {
         <Navbar />
         <MobileNavbar />
         {children}
-        </body>
+      </body>
     </html>
   );
 }

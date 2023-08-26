@@ -13,8 +13,10 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PasswordRecoverySchema } from '@/validations/passwordRecoveryForm';
 import { Button } from '@/components/ui/button';
+import axiosInstance from '@/lib/axiosInstance';
 
-function PasswordRecoveryForm({ isRecoveryMode, setIsRecoveryMode }) {
+function PasswordRecoveryForm({ onValidEmail, setShowBanner }) {
+  // <-- Añadido el prop onValidEmail
   const form = useForm({
     resolver: zodResolver(PasswordRecoverySchema),
     defaultValues: {
@@ -24,8 +26,20 @@ function PasswordRecoveryForm({ isRecoveryMode, setIsRecoveryMode }) {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
-    setIsRecoveryMode(false)
+    axiosInstance.post('/auth/forget-password', {
+      email: values.recovery_email
+    })
+    .then(response => {
+      if (response.status === 200) {
+        onValidEmail(values.recovery_email);
+        setShowBanner(true)
+      } else {
+        console.error("Error en la respuesta del servidor", response);
+      }
+    })
+    .catch(error => {
+      console.error("Hubo un error al hacer la petición", error);
+    });
   };
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">

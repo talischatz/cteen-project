@@ -14,9 +14,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LoginFormSchema } from '@/validations/loginForm';
-import Link from 'next/link';
 
-export default function LoginForm({isRecoveryMode, setIsRecoveryMode}) {
+export default function LoginForm({ onRequestRecovery }) {
   const form = useForm({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
@@ -90,7 +89,10 @@ export default function LoginForm({isRecoveryMode, setIsRecoveryMode}) {
                 </FormItem>
               )}
             />
-            <p onClick={() => setIsRecoveryMode(true)} className="text-xs text-primary font-semibold hover:underline w-full text-right cursor-pointer">
+            <p
+              onClick={() => onRequestRecovery()}
+              className="text-xs text-primary font-semibold hover:underline w-full text-right cursor-pointer"
+            >
               ¿Olvidaste tu contraseña?
             </p>
           </div>

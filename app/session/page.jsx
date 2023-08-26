@@ -2,13 +2,16 @@
 
 import LoginForm from '@/components/login/LoginForm';
 import PasswordRecoveryForm from '@/components/password-recovery/PasswordRecoveryForm';
+import PasswordResetForm from '@/components/password-reset/PasswordResetForm';
 import RegisterForm from '@/components/register/RegisterForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Image from 'next/image';
 import { useState } from 'react';
 
 export default function SessionPage() {
-  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
+  const [viewMode, setViewMode] = useState('login');
+  const [recoveryEmail, setRecoveryEmail] = useState(null);
+  const [showBanner, setShowBanner] = useState(false)
 
   return (
     <div className="full-container flex items-start md:items-center justify-center">
@@ -28,16 +31,27 @@ export default function SessionPage() {
             <TabsTrigger value="signup">Registrarse</TabsTrigger>
           </TabsList>
           <TabsContent value="login">
-            {isRecoveryMode ? (
+            {viewMode === 'recovery' && (
               <PasswordRecoveryForm
-                isRecoveryMode={isRecoveryMode}
-                setIsRecoveryMode={setIsRecoveryMode}
+                setShowBanner={setShowBanner}
+                onValidEmail={(email) => {
+                  setRecoveryEmail(email);
+                  setViewMode('reset');
+                }}
               />
-            ) : (
-              <LoginForm
-                isRecoveryMode={isRecoveryMode}
-                setIsRecoveryMode={setIsRecoveryMode}
+            )}
+            {viewMode === 'reset' && (
+              <PasswordResetForm
+                email={recoveryEmail}
+                showBanner={showBanner}
+                setShowBanner={setShowBanner}
+                onPasswordReset={() => {
+                  setViewMode('login');
+                }}
               />
+            )}
+            {viewMode === 'login' && (
+              <LoginForm onRequestRecovery={() => setViewMode('recovery')} />
             )}
           </TabsContent>
           <TabsContent value="signup">

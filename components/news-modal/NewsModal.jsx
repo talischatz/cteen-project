@@ -18,7 +18,7 @@ function NewsModal({ news, onClose }) {
             initial={{ scale: 0.7, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.7, y: 50 }}
-            className="max-w-2xl bg-white p-4 overflow-y-auto relative"
+            className="max-w-2xl bg-white p-4 overflow-y-auto relative rounded"
           >
             <div className="w-full flex items-center justify-end -translate-y-2">
               <XCircle className="text-gray-600 cursor-pointer" size={30} onClick={onClose} />
