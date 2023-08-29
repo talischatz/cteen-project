@@ -2,7 +2,7 @@ import VideoPlayer from '@/components/video-player/VideoPlayer';
 import NewsList from '@/components/news-list/NewsList';
 import AboutUs from '@/components/about-us/AboutUs';
 import HomeBanner from '@/components/home-banner/HomeBanner';
-import PointsBanner from '@/components/earned-points-banner/PointsBanner';
+import PointsBanner from '@/components/points-banner/PointsBanner';
 
 export default function Home() {
 

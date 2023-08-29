@@ -20,8 +20,9 @@ function PasswordResetForm({ setIsRecoveryMode, showBanner, setShowBanner }) {
     resolver: zodResolver(PasswordResetSchema),
     defaultValues: {
       otp: '',
-      newPassword: '',
-      confirmPassword: '',
+      email: '',
+      new_password: '',
+      confirm_password: '',
     },
     shouldFocusError: false,
   });
@@ -62,10 +63,25 @@ function PasswordResetForm({ setIsRecoveryMode, showBanner, setShowBanner }) {
             )}
           />
 
+          {/* Campo para ingresar el email del usuario */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="font-semibold">Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese tu email de usuario" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Campo para ingresar la nueva contraseña */}
           <FormField
             control={form.control}
-            name="newPassword"
+            name="new_password"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="font-semibold">
@@ -86,7 +102,7 @@ function PasswordResetForm({ setIsRecoveryMode, showBanner, setShowBanner }) {
           {/* Campo para confirmar la nueva contraseña */}
           <FormField
             control={form.control}
-            name="confirmPassword"
+            name="confirm_password"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="font-semibold">
