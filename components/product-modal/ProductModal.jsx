@@ -1,12 +1,43 @@
 'use client';
 
+'use client';
+
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { AnimatePresence, motion } from 'framer-motion';
 import { MinusCircle, PlusCircle, XCircle } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  selectedGroupedProducts,
+  setGroupedProducts,
+} from '@/redux/slices/shoppingCartSlice';
+import { cn } from '@/lib/utils';
 
-function ProductModal({product, onClose}) {
+function ProductModal({ product, onClose }) {
+  const [productQty, setProductQty] = useState(0);
+  const groupedProducts = useSelector(selectedGroupedProducts);
+  const dispatch = useDispatch();
+
+  const incrementProductQty = () => {
+    setProductQty(productQty + 1);
+  };
+
+  const decrementProductQty = () => {
+    if (productQty <= 0) return;
+    setProductQty(productQty - 1);
+  };
+
+  useEffect(() => {
+    console.log(groupedProducts);
+  }, [groupedProducts]);
+
+  const addToCart = () => {
+    dispatch(setGroupedProducts({ quantity: productQty, ...product }));
+    setProductQty(0);
+    onClose();
+  };
+
   return (
     <AnimatePresence>
       {product && (
@@ -49,13 +80,25 @@ function ProductModal({product, onClose}) {
                   Stock
                 </p>
               </div>
-              <div className='mt-8 flex items-center justify-center gap-6'>
-                <MinusCircle className='text-primary cursor-pointer active:scale-[0.97]' size={30}/>
-                <span>0</span>
-                <PlusCircle className='text-primary cursor-pointer active:scale-[0.97]' size={30}/>
+              <div className="mt-8 flex items-center justify-center gap-6">
+                <MinusCircle
+                  className={cn(
+                    'text-primary cursor-pointer active:scale-[0.97]',
+                    productQty <= 0 &&
+                      'text-gray-400 cursor-not-allowed pointer-events-none'
+                  )}
+                  size={30}
+                  onClick={decrementProductQty}
+                />
+                <span>{productQty}</span>
+                <PlusCircle
+                  className="text-primary cursor-pointer active:scale-[0.97]"
+                  size={30}
+                  onClick={incrementProductQty}
+                />
               </div>
               <div className="flex flex-col mt-10">
-                <Button>Añadir al carrito</Button>
+                <Button onClick={addToCart}>Añadir al carrito</Button>
               </div>
             </div>
           </motion.div>

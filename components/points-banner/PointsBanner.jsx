@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { XCircle } from 'lucide-react';
@@ -9,9 +9,9 @@ function PointsBanner() {
 
   useEffect(() => {
     setTimeout(() => {
-      setShowPointsBanner(false)
-    }, 10000)
-  }, [])
+      setShowPointsBanner(false);
+    }, 10000);
+  }, []);
 
   return (
     <AnimatePresence>
@@ -26,7 +26,9 @@ function PointsBanner() {
             <span>
               ¡Felicitaciones <span className="text-primary">Joaquin!</span>
             </span>
-            <span>Has ganado <span className='text-primary'>3000</span> puntos 🚀.</span>
+            <span>
+              Has ganado <span className="text-primary">3000</span> puntos 🚀.
+            </span>
             <span>
               Puedes utilizarlos para obtener cosas en el store de Cteen
             </span>
