@@ -1,9 +1,11 @@
 'use client';
 
 import {
-  isModalOpen,
+  completedPurchaseModalState,
   selectedGroupedProducts,
-  triggerModal,
+  shoppingCartModalState,
+  triggerCompletedPurchaseModal,
+  triggerShoppingCartModal,
 } from '@/redux/slices/shoppingCartSlice';
 import { AnimatePresence, motion } from 'framer-motion';
 import { PackagePlus, XCircle } from 'lucide-react';
@@ -13,11 +15,14 @@ import ShoppingCartItem from '../shopping-cart-item/ShoppingCartItem';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { selectUserData } from '@/redux/slices/userSlice';
+import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchaseModal';
 
 function ShoppingCartModal() {
   const groupedProducts = useSelector(selectedGroupedProducts);
-  const isModalShowing = useSelector(isModalOpen);
-  const [showInsuficientPointsBanner, setShowInsuficientBanner] = useState(false)
+  const shoppingCartModalShowing = useSelector(shoppingCartModalState);
+  const completedPurchseModalShowing = useSelector(completedPurchaseModalState);
+  const [showInsuficientPointsBanner, setShowInsuficientBanner] =
+    useState(false);
   const totalProducts = groupedProducts.reduce(
     (acc, product) => (acc += product.quantity),
     0
@@ -27,21 +32,23 @@ function ShoppingCartModal() {
     0
   );
   const dispatch = useDispatch();
-  const user = useSelector(selectUserData)
+  const user = useSelector(selectUserData);
 
   const onModalClose = () => {
-    dispatch(triggerModal(false));
+    dispatch(triggerShoppingCartModal(false));
   };
 
   const onBuyConfirmation = () => {
-    if(totalCost <= user.points) dispatch(triggerModal(false));
-    else setShowInsuficientBanner(true)
+    if (totalCost <= user.points) {
+      dispatch(triggerShoppingCartModal(false));
+      dispatch(triggerCompletedPurchaseModal(true));
+    } else setShowInsuficientBanner(true);
     console.log(groupedProducts);
   };
 
   return (
     <AnimatePresence>
-      {groupedProducts && isModalShowing && (
+      {groupedProducts && shoppingCartModalShowing && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -52,7 +59,7 @@ function ShoppingCartModal() {
             initial={{ scale: 0.7, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.7, y: 50 }}
-            className="bg-white p-4 overflow-y-auto relative rounded flex flex-col h-fit w-[350px] shadow-md"
+            className="bg-white p-[23px] overflow-y-auto relative rounded flex flex-col h-fit max-w-[400px] w-full shadow-md"
           >
             <div className="p-2 flex flex-col">
               <div className="flex items-center w-full justify-between">
@@ -84,20 +91,30 @@ function ShoppingCartModal() {
                     initial={{ opacity: 0, y: -50 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 50 }}
-                    className="w-full px-4 py-4 border border-red-400 bg-red-200 rounded text-sm text-gray-600 relative mt-6"
+                    className="w-full px-4 py-4 border border-red-400 bg-red-200 rounded text-sm text-gray-600 relative mt-6 flex flex-col"
                   >
-                    Ups! 😅 No tienes los puntos necesarios para comprar estos
-                    productos, intenta quitando algunos.
                     <button
                       onClick={() => setShowInsuficientBanner(false)}
-                      className="absolute top-2 right-2 text-red-600 hover:text-red-700"
+                      className="w-full flex justify-end items-center text-red-600 hover:text-red-700 -translate-y-1"
                     >
                       <XCircle size={16} />
                     </button>
+                    <span>
+                      Ups! 😅 No tienes los puntos necesarios para comprar estos
+                      productos, intenta quitando algunos.
+                    </span>
                   </motion.div>
                 )}
-                <Button className={cn("w-full mt-8", showInsuficientPointsBanner && 'bg-gray-400 cursor-not-allowed pointer-events-none')} disabled={showInsuficientPointsBanner} onClick={onBuyConfirmation}>
-                  Comprar
+                <Button
+                  className={cn(
+                    'w-full mt-8',
+                    showInsuficientPointsBanner &&
+                      'bg-gray-400 cursor-not-allowed pointer-events-none'
+                  )}
+                  disabled={showInsuficientPointsBanner}
+                  onClick={onBuyConfirmation}
+                >
+                  Finalizar compra
                 </Button>
               </div>
               <div
@@ -112,6 +129,9 @@ function ShoppingCartModal() {
             </div>
           </motion.div>
         </motion.div>
+      )}
+      {completedPurchseModalShowing && (
+        <CompletedPurchaseModal totalCost={totalCost} />
       )}
     </AnimatePresence>
   );

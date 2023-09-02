@@ -1,30 +1,19 @@
 'use client';
 
-import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { NavbarLinks } from '../../constants/NavbarLinks';
-import { FaFacebookSquare, FaInstagram, FaTiktok } from 'react-icons/fa';
-import { ShoppingCart } from 'lucide-react';
-import {
-  selectedGroupedProducts,
-  triggerModal,
-} from '@/redux/slices/shoppingCartSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import { selectUserData } from '@/redux/slices/userSlice';
+import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
 
 function Navbar() {
   const pathname = usePathname();
-  const dispatch = useDispatch();
-  const cartProductsQty = useSelector(selectedGroupedProducts).length;
-  const user = useSelector(selectUserData)
-
-  const onShoppinCartClick = () => {
-    dispatch(triggerModal(true));
-  };
+  const user = useSelector(selectUserData);
 
   return (
     <div
@@ -83,18 +72,7 @@ function Navbar() {
                 className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
               />
             </Link>
-            <div className="relative">
-              <div className="h-[14px] w-[14px] rounded-full bg-primary absolute -top-1 -right-1 flex items-center justify-center">
-                <span className="text-[8px] text-gray-600 font-bold">
-                  {cartProductsQty}
-                </span>
-              </div>
-              <ShoppingCart
-                size={20}
-                className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
-                onClick={onShoppinCartClick}
-              />
-            </div>
+            <ShoppingCartComponent />
           </div>
           <ShoppingCartModal />
         </nav>

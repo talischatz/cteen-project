@@ -51,7 +51,7 @@ function ProductModal({ product, onClose }) {
             initial={{ scale: 0.7, y: 50 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.7, y: 50 }}
-            className="bg-white p-4 overflow-y-auto relative rounded flex flex-col h-fit w-[350px] shadow-md"
+            className="bg-white p-[23px] overflow-y-auto relative rounded flex flex-col h-fit w-[350px] shadow-md"
           >
             <div className="w-full flex absolute top-6 justify-end right-6 z-100">
               <XCircle

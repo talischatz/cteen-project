@@ -1,26 +1,14 @@
 'use client';
 
 import { NavbarLinks } from '@/constants/NavbarLinks';
-import {
-  selectedGroupedProducts,
-  triggerModal,
-} from '@/redux/slices/shoppingCartSlice';
-import { ShoppingCart } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
-import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
+import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
 
 function MobileNavbar() {
   const pathname = usePathname();
-  const dispatch = useDispatch();
-
-  const cartProductsQty = useSelector(selectedGroupedProducts).length;
-
-  const onShoppinCartClick = () => {
-    dispatch(triggerModal(true));
-  };
 
   return (
     <>
@@ -57,18 +45,7 @@ function MobileNavbar() {
             className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
           />
         </Link>
-        <div className="relative">
-          <div className="h-[14px] w-[14px] rounded-full bg-primary absolute -top-1 -right-1 flex items-center justify-center">
-            <span className="text-[8px] text-gray-600 font-bold">
-              {cartProductsQty}
-            </span>
-          </div>
-          <ShoppingCart
-            size={20}
-            className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
-            onClick={onShoppinCartClick}
-          />
-        </div>
+        <ShoppingCartComponent />
       </div>
       <ShoppingCartModal />
     </>
