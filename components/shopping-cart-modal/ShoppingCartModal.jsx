@@ -8,7 +8,7 @@ import {
   triggerShoppingCartModal,
 } from '@/redux/slices/shoppingCartSlice';
 import { AnimatePresence, motion } from 'framer-motion';
-import { PackagePlus, XCircle } from 'lucide-react';
+import { Loader2, PackagePlus, XCircle } from 'lucide-react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartItem from '../shopping-cart-item/ShoppingCartItem';
@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { selectUserData } from '@/redux/slices/userSlice';
 import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchaseModal';
+import axiosInstance from '@/lib/axiosInstance';
 
 function ShoppingCartModal() {
   const groupedProducts = useSelector(selectedGroupedProducts);
@@ -23,6 +24,7 @@ function ShoppingCartModal() {
   const completedPurchseModalShowing = useSelector(completedPurchaseModalState);
   const [showInsuficientPointsBanner, setShowInsuficientBanner] =
     useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const totalProducts = groupedProducts.reduce(
     (acc, product) => (acc += product.quantity),
     0
@@ -40,8 +42,19 @@ function ShoppingCartModal() {
 
   const onBuyConfirmation = () => {
     if (totalCost <= user.points) {
-      dispatch(triggerShoppingCartModal(false));
-      dispatch(triggerCompletedPurchaseModal(true));
+      setIsLoading(true);
+      axiosInstance
+        .post('/success-purchase', {
+          email: user.email,
+          products: groupedProducts,
+          userPointsLeft: user.points - totalCost,
+          totalCost,
+        })
+        .then((res) => {
+          setIsLoading(false);
+          dispatch(triggerShoppingCartModal(false));
+          dispatch(triggerCompletedPurchaseModal(true));
+        });
     } else setShowInsuficientBanner(true);
     console.log(groupedProducts);
   };
@@ -107,13 +120,16 @@ function ShoppingCartModal() {
                 )}
                 <Button
                   className={cn(
-                    'w-full mt-8',
+                    'w-full mt-8 flex items-center gap-3',
                     showInsuficientPointsBanner &&
                       'bg-gray-400 cursor-not-allowed pointer-events-none'
                   )}
                   disabled={showInsuficientPointsBanner}
                   onClick={onBuyConfirmation}
                 >
+                  <Loader2
+                    className={cn('animate-spin', !isLoading && 'hidden')}
+                  />
                   Finalizar compra
                 </Button>
               </div>
