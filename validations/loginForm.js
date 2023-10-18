@@ -1,7 +1,7 @@
 import * as z from 'zod';
 
 export const LoginFormSchema = z.object({
-  username: z.string().refine(value => !!value, {
+  email: z.string().refine(value => !!value, {
     message: 'El campo usuario es requerido'
   }).refine(value => value.length >= 2, {
     message: 'El usuario debe tener al menos 2 caracteres'

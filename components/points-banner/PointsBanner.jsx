@@ -3,9 +3,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { XCircle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '@/redux/slices/userSlice';
+
 
 function PointsBanner() {
   const [showPointsBanner, setShowPointsBanner] = useState(true);
+  const user = useSelector(selectUserData);
 
   useEffect(() => {
     setTimeout(() => {
@@ -24,13 +28,13 @@ function PointsBanner() {
         >
           <div className="flex flex-col md:flex-row gap-1 md:gap-2 text-sm font-semibold">
             <span>
-              ¡Felicitaciones <span className="text-primary">Joaquin!</span>
+              ¡Felicitaciones <span className="text-primary"> {user.name}</span>
             </span>
             <span>
               Has ganado <span className="text-primary">3000</span> puntos 🚀.
             </span>
             <span>
-              Puedes utilizarlos para obtener cosas en el store de Cteen
+              Puedes utilizarlos para obtener regalos en el store de Cteen
             </span>
           </div>
           <button

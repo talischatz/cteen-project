@@ -3,31 +3,53 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LoginFormSchema } from '@/validations/loginForm';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
+import { useRouter } from 'next/navigation'
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/slices/userSlice'; 
+
 
 export default function LoginForm({ onRequestRecovery }) {
+
+  const router = useRouter()
+  const dispatch = useDispatch();
+
   const form = useForm({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      username: '',
+      email: '',
       password: '',
       remember_me: false,
     },
     shouldFocusError: false,
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    try {
+    
+      const usersRef = collection(db, 'users');
+      const querySnapshot = await getDocs(usersRef);
+      const users = querySnapshot.docs.map((doc) => doc.data());
+
+      const user = users.find((user) => user.email === values.email && user.password === values.password);
+
+      if (user) {
+
+        console.log('Usuario autenticado:', user);
+        dispatch(setUser({ first_name: user.first_name }));
+        router.push('/');
+      } else {
+        console.error('Credenciales incorrectas');
+      }
+
+    } catch (error) {
+      console.error('Error al autenticar:', error);
+    }
   }
 
   return (
@@ -39,7 +61,7 @@ export default function LoginForm({ onRequestRecovery }) {
         >
           <FormField
             control={form.control}
-            name="username"
+            name="email"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="font-semibold">Usuario</FormLabel>
@@ -96,7 +118,7 @@ export default function LoginForm({ onRequestRecovery }) {
               ¿Olvidaste tu contraseña?
             </p>
           </div>
-          <div className="w-full md:absolute md:bottom-0 md:left-0">
+          <div className="w-full">
             <Button type="submit" className="w-full">
               Enviar
             </Button>

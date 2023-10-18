@@ -22,6 +22,8 @@ import {
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { SignupFormSchema } from '@/validations/signupForm';
+import { collection, addDoc } from "firebase/firestore"; 
+import { db } from '@/firebase';
 
 export default function RegisterForm() {
   const form = useForm({
@@ -36,8 +38,21 @@ export default function RegisterForm() {
     shouldFocusError: false
   });
 
-  function onSubmit(values) {
-    console.log(values);
+  async function onSubmit(values) {
+    try {
+
+      const docRef = await addDoc(collection(db, "users"), {
+        first_name: values.first_name,
+        last_name: values.last_name,
+        born_date: values.born_date,
+        email: values.email,
+        password: values.password
+      });
+      console.log("Documento añadido con ID: ", docRef.id);
+      
+    } catch (error) {
+      console.error("Error al añadir documento: ", error);
+    }
   }
 
   return (
@@ -149,7 +164,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          <div className='w-full md:absolute md:bottom-0 md:left-0'>
+          <div className='w-full lg:mt-16 md:absolute md:left-0 '>
             <Button type="submit" className="w-full" >
               Enviar
             </Button>

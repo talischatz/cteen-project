@@ -53,8 +53,8 @@ export default function DoingGoodForm() {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className="font-semibold">Subir archivo</FormLabel>
-                <FormControl>
-                  <Input placeholder="Cargar archivo" type="file" {...field} />
+                <FormControl className="cursor-pointer">
+                  <Input placeholder="Cargar archivo" type="file" {...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
