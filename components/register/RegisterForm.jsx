@@ -166,7 +166,7 @@ export default function RegisterForm() {
           />
           <div className='w-full lg:mt-16 md:absolute md:left-0 '>
             <Button type="submit" className="w-full" >
-              Enviar
+             Registrarse
             </Button>
           </div>
         </form>
