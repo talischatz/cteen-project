@@ -3,7 +3,7 @@ import { Home, Store, ActivitySquare, FileText, ThumbsUp } from "lucide-react";
 export const NavbarLinks = [
   {
     label: 'Home',
-    href: '/',
+    href: '/home',
     Icon: Home
   },
   {
