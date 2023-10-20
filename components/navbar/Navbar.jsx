@@ -19,7 +19,7 @@ function Navbar() {
     <div
       className={cn(
         'full-container h-[70px] min-h-full',
-        (pathname === '/session' || pathname === '/password-recovery') &&
+        (pathname === '/' || pathname === '/password-recovery') &&
           'hidden'
       )}
     >

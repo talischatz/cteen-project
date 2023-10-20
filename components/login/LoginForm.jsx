@@ -42,7 +42,7 @@ export default function LoginForm({ onRequestRecovery }) {
 
         console.log('Usuario autenticado:', user);
         dispatch(setUser({ first_name: user.first_name }));
-        router.push('/');
+        router.push('/home');
       } else {
         console.error('Credenciales incorrectas');
       }
