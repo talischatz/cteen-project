@@ -3,29 +3,24 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Calendar } from '@/components/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { SignupFormSchema } from '@/validations/signupForm';
 import { collection, addDoc } from "firebase/firestore"; 
 import { db } from '@/firebase';
+import ModalRegistration from '../successful-registration-modal/ModalRegistration';
+import { useState } from 'react';
+
 
 export default function RegisterForm() {
+
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(SignupFormSchema),
     defaultValues: {
@@ -49,7 +44,7 @@ export default function RegisterForm() {
         password: values.password
       });
       console.log("Documento añadido con ID: ", docRef.id);
-      
+      setIsSuccessModalVisible(true);
     } catch (error) {
       console.error("Error al añadir documento: ", error);
     }
@@ -165,12 +160,41 @@ export default function RegisterForm() {
             )}
           />
           <div className='w-full lg:mt-16 md:absolute md:left-0 '>
-            <Button type="submit" className="w-full" >
+            <Button type="submit" className="w-full" onClick={form.handleSubmit(onSubmit)}>
              Registrarse
             </Button>
           </div>
         </form>
       </Form>
+      {isSuccessModalVisible && <ModalRegistration onClose={() => setIsSuccessModalVisible(false)} />}
     </div>
   );
 }
+
+
+
+// import React, { useState, useEffect } from 'react';
+
+// const [isPopupVisible, setIsPopupVisible] = useState(false);
+
+  // useEffect(() => {
+  //   // Muestra el pop-up después de un retraso de 1 segundo (1000 milisegundos) cuando isPopupVisible es verdadero
+  //   if (isPopupVisible) {
+  //     const popupTimeout = setTimeout(() => {
+  //       setIsPopupVisible(false);
+  //     }, 3000);
+  //     return () => clearTimeout(popupTimeout); // Limpia el temporizador cuando el componente se desmonta
+  //   }
+  // }, [isPopupVisible]);
+
+    //  setIsPopupVisible(true);
+
+
+                {/* Pop-up después del registro exitoso */}
+            {/* {isPopupVisible && (
+        <div className="popup">
+          <div className="popup-content bg-red-500 p-9 rounded-lg">
+            <p>¡Registro exitoso!</p>
+          </div>
+        </div>
+      )} */}
