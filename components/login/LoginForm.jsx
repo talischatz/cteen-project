@@ -41,7 +41,7 @@ export default function LoginForm({ onRequestRecovery }) {
 
       if (user) {
         console.log('Usuario autenticado:', user);
-        console.log(localStorage);
+        localStorage.setItem('userData', JSON.stringify({ first_name: user.first_name, email: user.email }));
         dispatch(setUser({ first_name: user.first_name, email: user.email }));
         router.push('/home');
       } else {

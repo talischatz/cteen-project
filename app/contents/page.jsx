@@ -3,7 +3,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/redux/slices/userSlice'; 
+import { loadUserFromLocalStorage } from '@/redux/slices/userSlice'; 
 import ReactPlayer from "react-player/youtube";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
@@ -20,12 +20,7 @@ export default function ContentsPage() {
   ];
   
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    console.log(storedUserData);
-    if (storedUserData) {
-      const userData = JSON.parse(storedUserData);
-      dispatch(setUser(userData));
-    }
+    dispatch(loadUserFromLocalStorage());
   }, [dispatch]);
 
   return (

@@ -24,6 +24,15 @@ const userSlice = createSlice({
 // Actions
 export const { setUser } = userSlice.actions
 
+export const loadUserFromLocalStorage = () => async (dispatch) => {
+  const storedUserData = localStorage.getItem('userData');
+  console.log(storedUserData);
+  if (storedUserData) {
+    const userData = JSON.parse(storedUserData);
+    dispatch(setUser(userData));
+  }
+};
+
 // Selectors
 export const selectUserData = state => state.user
 

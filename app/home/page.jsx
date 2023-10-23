@@ -7,7 +7,7 @@ import HomeBanner from '@/components/home-banner/HomeBanner';
 import PointsBanner from '@/components/points-banner/PointsBanner';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/redux/slices/userSlice'; 
+import { loadUserFromLocalStorage } from '@/redux/slices/userSlice'; 
 
 
 export default function Home() {
@@ -15,14 +15,8 @@ export default function Home() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    console.log(storedUserData);
-    if (storedUserData) {
-      const userData = JSON.parse(storedUserData);
-      dispatch(setUser(userData));
-    }
+    dispatch(loadUserFromLocalStorage());
   }, [dispatch]);
-
 
 
   return (
