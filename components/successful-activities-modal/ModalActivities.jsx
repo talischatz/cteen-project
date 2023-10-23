@@ -1,14 +1,13 @@
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { XCircle } from 'lucide-react';
+// import { XCircle } from 'lucide-react';
 
-const ModalRegistration = ({ onClose }) => {
+const ModalActivities = ({ onClose }) => {
   const router = useRouter();
 
   const handleGoToHome = () => {
-    router.push('/');
+    router.push('/home');
     onClose(); 
-    location.reload();
   };
 
   return (
@@ -22,19 +21,19 @@ const ModalRegistration = ({ onClose }) => {
         initial={{ scale: 0.7 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0.7 }}
-        className="bg-white p-4 rounded shadow-lg flex flex-col items-center"
+        className="bg-white p-8 rounded shadow-lg flex flex-col items-center "
       >
         <div className="flex items-center justify-between mb-4 w-full">
-          <h2 className="text-primary text-2xl font-semibold">Registro Exitoso</h2>
-          <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
+          <h2 className="text-primary text-2xl font-semibold">¡Actividad creada con exito!</h2>
+          {/* <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} /> */}
         </div>
-        <p>Tu usuario se ha creado exitosamente. ¡Bienvenido!</p>
+        <p>Tu actividad se guardo correctamente</p>
         <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
-          Inicia Sesión
+          volver al inicio
         </button>
       </motion.div>
     </motion.div>
   );
 };
 
-export default ModalRegistration;
+export default ModalActivities;

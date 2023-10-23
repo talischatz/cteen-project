@@ -24,8 +24,14 @@ import { cn } from '@/lib/utils';
 import Lottie from 'lottie-react';
 import animationData from '@/public/animations/activity-animation.json';
 import { format } from 'date-fns';
+import { useState } from 'react';
+import ModalActivities from '../successful-activities-modal/ModalActivities';
+
 
 function ActivityForm() {
+
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(ActivityFormSchema),
     defaultValues: {
@@ -38,6 +44,7 @@ function ActivityForm() {
 
   function onSubmit(values) {
     console.log(values);
+    setIsSuccessModalVisible(true);
   }
 
   return (
@@ -134,6 +141,7 @@ function ActivityForm() {
           </div>
         </form>
       </Form>
+      {isSuccessModalVisible && <ModalActivities onClose={() => setIsSuccessModalVisible(false)} />}
     </div>
   );
 }

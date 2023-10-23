@@ -2,20 +2,18 @@
 
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import Lottie from 'lottie-react';
 import animationData from '@/public/animations/doing-good-animation.json';
 import { useRef } from 'react';
+import { useState } from 'react';
+import ModalDoingGood from '../successful-doingGood-modal/ModalDoingGood';
 
 export default function DoingGoodForm() {
+
+  const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+
   const lottieRef = useRef(null);
   const form = useForm({
     defaultValues: {
@@ -26,6 +24,7 @@ export default function DoingGoodForm() {
 
   function onSubmit(values) {
     console.log(values);
+    setIsSuccessModalVisible(true);
   }
 
   return (
@@ -47,7 +46,7 @@ export default function DoingGoodForm() {
               Continue doing good
             </p>
           </div>
-          <FormField
+          <FormField 
             control={form.control}
             name="upload_file"
             render={({ field }) => (
@@ -67,6 +66,7 @@ export default function DoingGoodForm() {
           </div>
         </form>
       </Form>
+      {isSuccessModalVisible && <ModalDoingGood onClose={() => setIsSuccessModalVisible(false)} />}
     </div>
   );
 }

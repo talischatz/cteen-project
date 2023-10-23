@@ -170,31 +170,3 @@ export default function RegisterForm() {
     </div>
   );
 }
-
-
-
-// import React, { useState, useEffect } from 'react';
-
-// const [isPopupVisible, setIsPopupVisible] = useState(false);
-
-  // useEffect(() => {
-  //   // Muestra el pop-up después de un retraso de 1 segundo (1000 milisegundos) cuando isPopupVisible es verdadero
-  //   if (isPopupVisible) {
-  //     const popupTimeout = setTimeout(() => {
-  //       setIsPopupVisible(false);
-  //     }, 3000);
-  //     return () => clearTimeout(popupTimeout); // Limpia el temporizador cuando el componente se desmonta
-  //   }
-  // }, [isPopupVisible]);
-
-    //  setIsPopupVisible(true);
-
-
-                {/* Pop-up después del registro exitoso */}
-            {/* {isPopupVisible && (
-        <div className="popup">
-          <div className="popup-content bg-red-500 p-9 rounded-lg">
-            <p>¡Registro exitoso!</p>
-          </div>
-        </div>
-      )} */}

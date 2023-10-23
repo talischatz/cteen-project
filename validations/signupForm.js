@@ -7,16 +7,19 @@ export const SignupFormSchema = z.object({
     .refine(value => value.length >= 2, {
       message: 'El nombre debe tener al menos 2 caracteres',
     }),
+
   last_name: z.string()
     .refine(value => !!value, { message: 'El apellido es requerido' })
     .refine(value => value.length >= 2, {
       message: 'El apellido debe tener al menos 2 caracteres',
     }),
+
   born_date: z.date({ invalid_type_error: 'La fecha de nacimiento es requerida' }).transform(string => format(string, 'P')),
+
   password: z.string()
     .refine(value => !!value, { message: 'La contraseña es requerida' })
-    .refine(value => value.length >= 2, {
-      message: 'La contraseña debe tener al menos 2 caracteres',
+    .refine(value => value.length >= 5, {
+      message: 'La contraseña debe tener al menos 5 caracteres',
     })
     .refine(value => value.length <= 30, {
       message: 'La contraseña debe tener como máximo 30 caracteres',

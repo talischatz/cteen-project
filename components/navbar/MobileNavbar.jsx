@@ -1,6 +1,8 @@
 'use client';
 
 import { NavbarLinks } from '@/constants/NavbarLinks';
+import { useSelector } from 'react-redux';
+import { selectUserData } from '@/redux/slices/userSlice';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
@@ -8,7 +10,13 @@ import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
 
 function MobileNavbar() {
+  const userData = useSelector(selectUserData);
   const pathname = usePathname();
+
+  if (!userData.isAuthenticated) {
+    return null;
+  }
+
 
   return (
     <>
