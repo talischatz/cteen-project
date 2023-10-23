@@ -25,10 +25,10 @@ function Navbar() {
     >
       <div className="w-full h-full flex items-center justify-between">
         <div className="flex gap-4 items-center">
-          <Avatar>
+          {/* <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
+          </Avatar> */}
           <div className="flex flex-col">
             <span className="text-gray-500 font-medium">
               {`Bienvenido, ${user.name}`}

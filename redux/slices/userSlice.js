@@ -5,6 +5,7 @@ const initialState = {
   points: '3500',
   email: null,
   isAuthenticated: false,
+
 }
 
 const userSlice = createSlice({
@@ -15,9 +16,10 @@ const userSlice = createSlice({
       state.name = payload.first_name;
       state.email = payload.email;
       state.isAuthenticated = true; 
+      console.log('Nuevo estado de usuario en Redux:', JSON.parse(JSON.stringify(state)));
     }
   }
-})
+});
 
 // Actions
 export const { setUser } = userSlice.actions

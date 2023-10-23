@@ -10,8 +10,9 @@ import { LoginFormSchema } from '@/validations/loginForm';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '@/firebase';
 import { useRouter } from 'next/navigation'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice'; 
+
 
 
 export default function LoginForm({ onRequestRecovery }) {
@@ -29,18 +30,18 @@ export default function LoginForm({ onRequestRecovery }) {
     shouldFocusError: false,
   });
 
+
   async function onSubmit(values) {
     try {
     
       const usersRef = collection(db, 'users');
       const querySnapshot = await getDocs(usersRef);
       const users = querySnapshot.docs.map((doc) => doc.data());
-
       const user = users.find((user) => user.email === values.email && user.password === values.password);
 
       if (user) {
-
         console.log('Usuario autenticado:', user);
+        console.log(localStorage);
         dispatch(setUser({ first_name: user.first_name, email: user.email }));
         router.push('/home');
       } else {

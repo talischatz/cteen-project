@@ -1,10 +1,15 @@
 "use client";
 
+
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/slices/userSlice'; 
 import ReactPlayer from "react-player/youtube";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 export default function ContentsPage() {
+  const dispatch = useDispatch();
   const videoUrls = [
     "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
     "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
@@ -14,6 +19,14 @@ export default function ContentsPage() {
     "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
   ];
   
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    console.log(storedUserData);
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      dispatch(setUser(userData));
+    }
+  }, [dispatch]);
 
   return (
     <div>
