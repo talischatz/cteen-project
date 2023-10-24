@@ -12,21 +12,18 @@ function PointsBanner() {
   const user = useSelector(selectUserData);
 
   useEffect(() => {
-    const hasShownBanner = localStorage.getItem('hasShownBanner');
+    const hasShownBanner = sessionStorage.getItem('hasShownBanner');
 
     if (!hasShownBanner && user.isAuthenticated) {
       setShowPointsBanner(true);
-      localStorage.setItem('hasShownBanner', 'true');
-    }
-  }, [user.isAuthenticated]);
+      sessionStorage.setItem('hasShownBanner', 'true');
 
-  useEffect(() => {
-    if (showPointsBanner) {
+      // Ocultar el banner después de 3500 milisegundos (3.5 segundos)
       setTimeout(() => {
         setShowPointsBanner(false);
       }, 3500);
     }
-  }, [showPointsBanner]);
+  }, [user.isAuthenticated]);
 
   return (
     <AnimatePresence>
