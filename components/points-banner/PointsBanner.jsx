@@ -8,14 +8,25 @@ import { selectUserData } from '@/redux/slices/userSlice';
 
 
 function PointsBanner() {
-  const [showPointsBanner, setShowPointsBanner] = useState(true);
+  const [showPointsBanner, setShowPointsBanner] = useState(false);
   const user = useSelector(selectUserData);
 
   useEffect(() => {
-    setTimeout(() => {
-      setShowPointsBanner(false);
-    }, 10000);
-  }, []);
+    const hasShownBanner = localStorage.getItem('hasShownBanner');
+
+    if (!hasShownBanner && user.isAuthenticated) {
+      setShowPointsBanner(true);
+      localStorage.setItem('hasShownBanner', 'true');
+    }
+  }, [user.isAuthenticated]);
+
+  useEffect(() => {
+    if (showPointsBanner) {
+      setTimeout(() => {
+        setShowPointsBanner(false);
+      }, 3500);
+    }
+  }, [showPointsBanner]);
 
   return (
     <AnimatePresence>
@@ -31,7 +42,7 @@ function PointsBanner() {
               ¡Felicitaciones <span className="text-primary"> {user.name}</span>
             </span>
             <span>
-              Has ganado <span className="text-primary">3000</span> puntos 🚀.
+              Has ganado <span className="text-primary">3500</span> puntos 🚀.
             </span>
             <span>
               Puedes utilizarlos para obtener regalos en el store de Cteen

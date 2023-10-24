@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import VideoPlayer from '@/components/video-player/VideoPlayer';
 import NewsList from '@/components/news-list/NewsList';
@@ -9,7 +9,6 @@ import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { loadUserFromLocalStorage } from '@/redux/slices/userSlice'; 
 
-
 export default function Home() {
 
   const dispatch = useDispatch();
@@ -17,7 +16,6 @@ export default function Home() {
   useEffect(() => {
     dispatch(loadUserFromLocalStorage());
   }, [dispatch]);
-
 
   return (
     <main className="full-container">
