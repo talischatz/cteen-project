@@ -21,7 +21,7 @@ function PointsBanner() {
       // Ocultar el banner después de 3500 milisegundos (3.5 segundos)
       setTimeout(() => {
         setShowPointsBanner(false);
-      }, 3500);
+      }, 5000);
     }
   }, [user.isAuthenticated]);
 
