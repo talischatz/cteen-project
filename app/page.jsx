@@ -34,10 +34,11 @@ export default function SessionPage() {
             {viewMode === 'recovery' && (
               <PasswordRecoveryForm
                 setShowBanner={setShowBanner}
-                onValidEmail={(email) => {
-                  setRecoveryEmail(email);
-                  setViewMode('reset');
-                }}
+                showBanner={showBanner}
+                // onValidEmail={(email) => {
+                //   setRecoveryEmail(email);
+                //   setViewMode('reset');
+                // }}
               />
             )}
             {viewMode === 'reset' && (

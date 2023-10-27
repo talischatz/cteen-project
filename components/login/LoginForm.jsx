@@ -7,11 +7,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { LoginFormSchema } from '@/validations/loginForm';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/firebase';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
 import { useRouter } from 'next/navigation'
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '@/redux/slices/userSlice'; 
+import { signInWithEmailAndPassword } from 'firebase/auth';
 
 
 
@@ -31,27 +32,38 @@ export default function LoginForm({ onRequestRecovery }) {
   });
 
 
-  async function onSubmit(values) {
-    try {
-    
-      const usersRef = collection(db, 'users');
-      const querySnapshot = await getDocs(usersRef);
-      const users = querySnapshot.docs.map((doc) => doc.data());
-      const user = users.find((user) => user.email === values.email && user.password === values.password);
 
-      if (user) {
-        console.log('Usuario autenticado:', user);
-        localStorage.setItem('userData', JSON.stringify({ first_name: user.first_name, email: user.email }));
-        dispatch(setUser({ first_name: user.first_name, email: user.email }));
+async function onSubmit(values) {
+  try {
+
+    const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+    const user = userCredential.user;
+
+    if (user) {
+
+      const usersRef = collection(db, "users");
+      const q = query(usersRef, where("email", "==", values.email)); 
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.docs.length > 0) {
+        const userData = querySnapshot.docs[0].data();
+        console.log("Usuario autenticado:", userData);
+        localStorage.setItem('userData', JSON.stringify({ first_name: userData.first_name, email: userData.email }));
+        dispatch(setUser({ first_name: userData.first_name, email: userData.email }));
         router.push('/home');
       } else {
-        console.error('Credenciales incorrectas');
+        console.error('No se encontró ningún documento para el usuario autenticado');
       }
-
-    } catch (error) {
-      console.error('Error al autenticar:', error);
+    } else {
+      console.error('Credenciales incorrectas');
     }
+  } catch (error) {
+    console.error('Error al autenticar:', error);
   }
+}
+
+  
+  
 
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">

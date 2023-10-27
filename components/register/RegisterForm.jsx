@@ -1,54 +1,74 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
-import { SignupFormSchema } from '@/validations/signupForm';
-import { collection, addDoc } from "firebase/firestore"; 
-import { db } from '@/firebase';
-import ModalRegistration from '../successful-registration-modal/ModalRegistration';
-import { useState } from 'react';
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+import { CalendarIcon } from "lucide-react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { SignupFormSchema } from "@/validations/signupForm";
+import { auth, db } from "@/firebase";
+import ModalRegistration from "../successful-registration-modal/ModalRegistration";
+import { useState } from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
 
 export default function RegisterForm() {
-
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(SignupFormSchema),
     defaultValues: {
-      first_name: '',
-      last_name: '',
-      born_date: '',
-      email: '',
-      password: '',
+      first_name: "",
+      last_name: "",
+      born_date: "",
+      email: "",
+      password: "",
     },
-    shouldFocusError: false
+    shouldFocusError: false,
   });
 
   async function onSubmit(values) {
     try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      const user = userCredential.user;
 
-      const docRef = await addDoc(collection(db, "users"), {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        born_date: values.born_date,
-        email: values.email,
-        password: values.password
-      });
-      console.log("Documento añadido con ID: ", docRef.id);
-      setIsSuccessModalVisible(true);
+      if (user) {
+
+        const userDocRef = await addDoc(collection(db, "users"), {
+          first_name: values.first_name,
+          last_name: values.last_name,
+          born_date: values.born_date,
+          email: values.email,
+        });
+
+        console.log("Usuario creado con ID: ", user.uid);
+        setIsSuccessModalVisible(true);
+      }
     } catch (error) {
-      console.error("Error al añadir documento: ", error);
+      console.error("Error al crear usuario: ", error);
     }
   }
+
 
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">
@@ -95,14 +115,14 @@ export default function RegisterForm() {
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
-                        variant={'outline'}
+                        variant={"outline"}
                         className={cn(
-                          'w-full pl-3 text-left font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0',
-                          !field.value && 'text-muted-foreground'
+                          "w-full pl-3 text-left font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0",
+                          !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value ? (
-                          format(field.value, 'P')
+                          format(field.value, "P")
                         ) : (
                           <span>Elige una fecha</span>
                         )}
@@ -116,7 +136,7 @@ export default function RegisterForm() {
                       selected={field.value}
                       onSelect={field.onChange}
                       disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
+                        date > new Date() || date < new Date("1900-01-01")
                       }
                       initialFocus
                     />
@@ -159,14 +179,20 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          <div className='w-full lg:mt-16 md:absolute md:left-0 '>
-            <Button type="submit" className="w-full" onClick={form.handleSubmit(onSubmit)}>
-             Registrarse
+          <div className="w-full lg:mt-16 md:absolute md:left-0 ">
+            <Button
+              type="submit"
+              className="w-full"
+              onClick={form.handleSubmit(onSubmit)}
+            >
+              Registrarse
             </Button>
           </div>
         </form>
       </Form>
-      {isSuccessModalVisible && <ModalRegistration onClose={() => setIsSuccessModalVisible(false)} />}
+      {isSuccessModalVisible && (
+        <ModalRegistration onClose={() => setIsSuccessModalVisible(false)} />
+      )}
     </div>
   );
 }
