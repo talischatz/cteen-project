@@ -1,69 +1,92 @@
-'use client';
+"use client";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Checkbox } from '@/components/ui/checkbox';
-import { LoginFormSchema } from '@/validations/loginForm';
-import { collection, getDocs, query, where } from 'firebase/firestore';
-import { auth, db } from '@/firebase';
-import { useRouter } from 'next/navigation'
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '@/redux/slices/userSlice'; 
-import { signInWithEmailAndPassword } from 'firebase/auth';
-
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { LoginFormSchema } from "@/validations/loginForm";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { auth, db } from "@/firebase";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { setUser } from "@/redux/slices/userSlice";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react";
 
 export default function LoginForm({ onRequestRecovery }) {
-
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
+  const [error, setError] = useState(null);
 
   const form = useForm({
     resolver: zodResolver(LoginFormSchema),
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       remember_me: false,
     },
     shouldFocusError: false,
   });
 
-
-
-async function onSubmit(values) {
-  try {
-
-    const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
-    const user = userCredential.user;
-
-    if (user) {
-
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("email", "==", values.email)); 
-      const querySnapshot = await getDocs(q);
-
-      if (querySnapshot.docs.length > 0) {
-        const userData = querySnapshot.docs[0].data();
-        console.log("Usuario autenticado:", userData);
-        localStorage.setItem('userData', JSON.stringify({ first_name: userData.first_name, email: userData.email }));
-        dispatch(setUser({ first_name: userData.first_name, email: userData.email }));
-        router.push('/home');
-      } else {
-        console.error('No se encontró ningún documento para el usuario autenticado');
-      }
-    } else {
-      console.error('Credenciales incorrectas');
+  useEffect(() => {
+    let timer;
+    if (error) {
+      // Configura un temporizador para limpiar el mensaje de error después de 3 segundos
+      timer = setTimeout(() => {
+        setError(null);
+      }, 3000);
     }
-  } catch (error) {
-    console.error('Error al autenticar:', error);
-  }
-}
 
-  
-  
+    // Limpia el temporizador cuando el componente se desmonta o cuando el estado de error cambia
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [error]); 
+
+  async function onSubmit(values) {
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      const user = userCredential.user;
+
+      if (user) {
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", values.email));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.docs.length > 0) {
+          const userData = querySnapshot.docs[0].data();
+          console.log("Usuario autenticado:", userData);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify({
+              first_name: userData.first_name,
+              email: userData.email,
+            })
+          );
+          dispatch(
+            setUser({ first_name: userData.first_name, email: userData.email })
+          );
+          router.push("/home");
+        } 
+      } 
+    } catch (error) {
+      console.error("Error al autenticar:", error);
+      setError("Error al autenticar. Por favor, intenta de nuevo.");
+    }
+  }
 
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">
@@ -132,6 +155,7 @@ async function onSubmit(values) {
             </p>
           </div>
           <div className="w-full">
+            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
             <Button type="submit" className="w-full">
               Enviar
             </Button>
