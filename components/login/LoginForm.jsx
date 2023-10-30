@@ -40,17 +40,16 @@ export default function LoginForm({ onRequestRecovery }) {
   useEffect(() => {
     let timer;
     if (error) {
-      // Configura un temporizador para limpiar el mensaje de error después de 3 segundos
       timer = setTimeout(() => {
         setError(null);
       }, 3000);
     }
-
-    // Limpia el temporizador cuando el componente se desmonta o cuando el estado de error cambia
     return () => {
       clearTimeout(timer);
     };
   }, [error]); 
+
+  
 
   async function onSubmit(values) {
     try {

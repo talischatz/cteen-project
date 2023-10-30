@@ -5,10 +5,10 @@ import { XCircle } from 'lucide-react';
 const ModalDoingGood = ({ onClose }) => {
   const router = useRouter();
 
-  const handleGoToHome = () => {
-    router.push('/home');
-    onClose(); 
-  };
+  // const handleGoToHome = () => {
+  //   router.push('/home');
+  //   onClose(); 
+  // };
 
   return (
     <motion.div

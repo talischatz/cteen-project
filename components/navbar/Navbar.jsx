@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import { selectUserData } from '@/redux/slices/userSlice';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
+import { ButtonLogout } from '../buttonLogout/ButtonLogout';
 
 function Navbar() {
   const pathname = usePathname();
@@ -74,6 +75,7 @@ function Navbar() {
             </Link>
             <ShoppingCartComponent />
           </div>
+          <ButtonLogout/>
           <ShoppingCartModal />
         </nav>
       </div>

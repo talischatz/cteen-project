@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-// import { XCircle } from 'lucide-react';
+import { XCircle } from 'lucide-react';
 
 const ModalActivities = ({ onClose }) => {
   const router = useRouter();
@@ -25,7 +25,7 @@ const ModalActivities = ({ onClose }) => {
       >
         <div className="flex items-center justify-between mb-4 w-full">
           <h2 className="text-primary text-2xl font-semibold">¡Actividad creada con exito!</h2>
-          {/* <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} /> */}
+          <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
         </div>
         <p>Tu actividad se guardo correctamente</p>
         <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>

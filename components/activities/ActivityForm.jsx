@@ -26,6 +26,8 @@ import animationData from '@/public/animations/activity-animation.json';
 import { format } from 'date-fns';
 import { useState } from 'react';
 import ModalActivities from '../successful-activities-modal/ModalActivities';
+import { auth, db } from '@/firebase';
+import { addDoc, collection } from 'firebase/firestore';
 
 
 function ActivityForm() {
@@ -42,9 +44,26 @@ function ActivityForm() {
     shouldFocusError: false,
   });
 
-  function onSubmit(values) {
-    console.log(values);
-    setIsSuccessModalVisible(true);
+  async function onSubmit(values) {
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        const activityData = {
+          activity_name: values.activity_name,
+          activity_date: values.activity_date,
+          activity_leader: values.activity_leader,
+          userId: user.uid, 
+          email: user.email
+        };
+        console.log(activityData);
+        await addDoc(collection(db, 'activities'), activityData);
+        setIsSuccessModalVisible(true);
+      } else {
+        console.error('Usuario no autenticado');
+      }
+    } catch (error) {
+      console.error('Error al guardar la actividad:', error);
+    }
   }
 
   return (
@@ -125,10 +144,10 @@ function ActivityForm() {
             name="activity_leader"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel className="font-semibold">Lider</FormLabel>
+                <FormLabel className="font-semibold">Participante</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Nombre del lider de la actividad"
+                    placeholder="Nombre del Participante de la actividad"
                     {...field}
                   />
                 </FormControl>

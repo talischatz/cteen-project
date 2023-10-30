@@ -20,6 +20,7 @@ export default function SessionPage() {
           <Image
             src={require('@/public/cteen_logo_sinfondo.png')}
             alt="cteen-logo"
+            priority={true}
           />
         </div>
         <Tabs
