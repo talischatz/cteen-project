@@ -1,13 +1,13 @@
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-// import { XCircle } from 'lucide-react';
+import { XCircle } from 'lucide-react';
 
 const ModalDoingGood = ({ onClose }) => {
   const router = useRouter();
 
   const handleGoToHome = () => {
     router.push('/home');
-    // onClose(); 
+    onClose(); 
   };
 
   return (
@@ -25,12 +25,12 @@ const ModalDoingGood = ({ onClose }) => {
       >
         <div className="flex items-center justify-between mb-4 w-full">
           <h2 className="text-primary text-2xl font-semibold">¡Imagen subida con exito!</h2>
-          {/* <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} /> */}
+          <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
         </div>
         <p>Gracias por hacer el bien 🤗</p>
-        <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
+        {/* <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
           volver al inicio
-        </button>
+        </button> */}
       </motion.div>
     </motion.div>
   );
