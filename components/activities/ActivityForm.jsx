@@ -28,6 +28,7 @@ import { useState } from 'react';
 import ModalActivities from '../successful-activities-modal/ModalActivities';
 import { auth, db } from '@/firebase';
 import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import BannerActivities from '../bannerActivities/BannerActivities';
 
 
 function ActivityForm() {
@@ -183,7 +184,7 @@ function ActivityForm() {
           </div>
         </form>
       </Form>
-      {isSuccessModalVisible && <ModalActivities onClose={() => setIsSuccessModalVisible(false)} />}
+      {isSuccessModalVisible && <BannerActivities onClose={() => setIsSuccessModalVisible(false)} />}
     </div>
   );
 }

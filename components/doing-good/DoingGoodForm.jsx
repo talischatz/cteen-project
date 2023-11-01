@@ -12,6 +12,7 @@ import ModalDoingGood from "../successful-doingGood-modal/ModalDoingGood";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/firebase";
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import BannerDoingGood from '../bannerDoingGood/BannerDoingGood';
 
 
 export default function DoingGoodForm({ onUploadSuccess }) {
@@ -137,7 +138,7 @@ export default function DoingGoodForm({ onUploadSuccess }) {
         </form>
       </Form>
       {isSuccessModalVisible && (
-        <ModalDoingGood onClose={() => setIsSuccessModalVisible(false)} />
+        <BannerDoingGood onClose={() => setIsSuccessModalVisible(false)} />
       )}
     </div>
   );

@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUserData } from "@/redux/slices/userSlice";
 
-function BannerDoingGood() {
+function BannerActivities() {
   const [showPointsBanner, setShowPointsBanner] = useState(true);
 
   useEffect(() => {
@@ -37,7 +37,7 @@ function BannerDoingGood() {
             <span>
               Has ganado <span className="text-primary">500</span> puntos
             </span>
-            <span>Por subir contenido a Doing Good 😊 🚀.</span>
+            <span>Por subir una actividad 😊 🚀.</span>
           </div>
           <button
             onClick={() => setShowPointsBanner(false)}
@@ -51,4 +51,4 @@ function BannerDoingGood() {
   );
 }
 
-export default BannerDoingGood;
+export default BannerActivities;
