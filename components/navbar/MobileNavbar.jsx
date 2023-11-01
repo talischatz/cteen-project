@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
-import { ButtonLogout } from '../buttonLogout/ButtonLogout';
+import { ButtonLogout } from '../buttonLogaut/ButtonLogout';
 
 function MobileNavbar() {
   const userData = useSelector(selectUserData);

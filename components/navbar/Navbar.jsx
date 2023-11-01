@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import { selectUserData } from '@/redux/slices/userSlice';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
-import { ButtonLogout } from '../buttonLogout/ButtonLogout';
+import { ButtonLogout } from '../buttonLogaut/ButtonLogout';
 import { useEffect } from 'react';
 
 function Navbar() {

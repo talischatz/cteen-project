@@ -10,11 +10,13 @@ import animationData from "@/public/animations/doing-good-animation.json";
 import { useRef, useState } from "react";
 import ModalDoingGood from "../successful-doingGood-modal/ModalDoingGood";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { storage } from "@/firebase";
+import { auth, db, storage } from "@/firebase";
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+
 
 export default function DoingGoodForm({ onUploadSuccess }) {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-  const [downloadURL, setDownloadURL] = useState(null); // Estado para almacenar la URL de descarga
+  const [downloadURL, setDownloadURL] = useState(null);
 
   const lottieRef = useRef(null);
   const form = useForm({
@@ -43,11 +45,33 @@ export default function DoingGoodForm({ onUploadSuccess }) {
       return null;
     }
   }
+
+  async function updateUserPoints() {
+    const user = auth.currentUser;
+    if (user) {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const currentPoints = userData.points
+        await updateDoc(userDocRef, {
+          points: currentPoints + 500,
+        });
+        console.log('un exito');
+      } else {
+        console.error("El documento del usuario no existe en Firestore.");
+      }
+    } else {
+      console.error("Usuario no autenticado");
+    }
+  }
   
 
   async function onSubmit(values) {
     const media = await uploadFile(values.upload_file[0]);
     if (media) {
+      updateUserPoints();
       setIsSuccessModalVisible(true);
     } else {
       console.error("Error al subir el archivo.");

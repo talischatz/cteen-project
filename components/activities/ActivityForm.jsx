@@ -49,7 +49,7 @@ function ActivityForm() {
       const user = auth.currentUser;
       if (user) {
         console.log('user: ', user);
-        // Guardar la actividad en Firestore
+  
         const activityData = {
           activity_name: values.activity_name,
           activity_date: values.activity_date,
@@ -59,19 +59,19 @@ function ActivityForm() {
         };
         await addDoc(collection(db, 'activities'), activityData);
   
-        // Obtener el documento del usuario desde Firestore
+ 
         const userDocRef = doc(db, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
         console.log('userdocSnap: ',userDocSnap);
         
         if (userDocSnap.exists()) {
-          // El documento del usuario existe, obtener los puntos actuales
+
           console.log(userDocSnap.exists());
           const userData = userDocSnap.data();
           console.log('userData',userData);
-          const currentPoints = userData.points || 0; // Si points no está definido, establecerlo en 0
+          const currentPoints = userData.points
           console.log('currentPoints',currentPoints);
-          // Sumar 500 puntos y actualizar el documento del usuario
+   
           await updateDoc(userDocRef, {
             points: currentPoints + 500
           });
