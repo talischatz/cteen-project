@@ -6,24 +6,20 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { selectUserData } from '@/redux/slices/userSlice';
 
-
-function PointsBanner() {
-  const [showPointsBanner, setShowPointsBanner] = useState(false);
-  const user = useSelector(selectUserData);
+function BannerDoingGood() {
+  const [showPointsBanner, setShowPointsBanner] = useState(true);
 
   useEffect(() => {
-    const hasShownBanner = sessionStorage.getItem('hasShownBanner');
+    const timeout = setTimeout(() => {
+      setShowPointsBanner(false);
+    }, 3000);
 
-    if (!hasShownBanner && user.isAuthenticated) {
-      setShowPointsBanner(true);
-      sessionStorage.setItem('hasShownBanner', 'true');
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, []); 
 
-      // Ocultar el banner después de 3500 milisegundos (3.5 segundos)
-      setTimeout(() => {
-        setShowPointsBanner(false);
-      }, 5000);
-    }
-  }, [user.isAuthenticated]);
+  const user = useSelector(selectUserData);
 
   return (
     <AnimatePresence>
@@ -57,4 +53,4 @@ function PointsBanner() {
   );
 }
 
-export default PointsBanner;
+export default BannerDoingGood;

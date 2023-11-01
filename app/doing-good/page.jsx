@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { loadUserFromLocalStorage } from "@/redux/slices/userSlice";
 import DoingGoodForm from "@/components/doing-good/DoingGoodForm";
 import { Card } from "@/components/card/Card"; // Asegúrate de importar el componente Card correctamente
+import BannerDoingGood from "@/components/bannerDoingGood/BannerDoingGood";
 
 export default function DoingGoodPage() {
   const dispatch = useDispatch();
@@ -31,6 +32,7 @@ export default function DoingGoodPage() {
 
   return (
     <div className="full-container flex flex-col">
+      <BannerDoingGood/>
       <div className="text-4xl text-primary font-semibold mt-8 text-center">
         Doing Good
       </div>

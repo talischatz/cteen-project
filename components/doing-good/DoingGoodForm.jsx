@@ -16,7 +16,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 export default function DoingGoodForm({ onUploadSuccess }) {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
-  const [downloadURL, setDownloadURL] = useState(null);
+  const [downloadURL, setDownloadURL] = useState(null); 
 
   const lottieRef = useRef(null);
   const form = useForm({
