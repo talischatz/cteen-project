@@ -27,7 +27,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import ModalActivities from '../successful-activities-modal/ModalActivities';
 import { auth, db } from '@/firebase';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 
 function ActivityForm() {
@@ -48,6 +48,8 @@ function ActivityForm() {
     try {
       const user = auth.currentUser;
       if (user) {
+        console.log('user: ', user);
+        // Guardar la actividad en Firestore
         const activityData = {
           activity_name: values.activity_name,
           activity_date: values.activity_date,
@@ -55,14 +57,35 @@ function ActivityForm() {
           userId: user.uid, 
           email: user.email
         };
-        console.log(activityData);
         await addDoc(collection(db, 'activities'), activityData);
-        setIsSuccessModalVisible(true);
+  
+        // Obtener el documento del usuario desde Firestore
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+        console.log('userdocSnap: ',userDocSnap);
+        
+        if (userDocSnap.exists()) {
+          // El documento del usuario existe, obtener los puntos actuales
+          console.log(userDocSnap.exists());
+          const userData = userDocSnap.data();
+          console.log('userData',userData);
+          const currentPoints = userData.points || 0; // Si points no está definido, establecerlo en 0
+          console.log('currentPoints',currentPoints);
+          // Sumar 500 puntos y actualizar el documento del usuario
+          await updateDoc(userDocRef, {
+            points: currentPoints + 500
+          });
+          
+          setIsSuccessModalVisible(true);
+          console.log('Actividad creada y puntos actualizados.');
+        } else {
+          console.error('El documento del usuario no existe en Firestore.');
+        }
       } else {
         console.error('Usuario no autenticado');
       }
     } catch (error) {
-      console.error('Error al guardar la actividad:', error);
+      console.error('Error al guardar la actividad y actualizar puntos:', error);
     }
   }
 

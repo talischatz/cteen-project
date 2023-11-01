@@ -11,10 +11,18 @@ import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import { selectUserData } from '@/redux/slices/userSlice';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
 import { ButtonLogout } from '../buttonLogout/ButtonLogout';
+import { useEffect } from 'react';
 
 function Navbar() {
   const pathname = usePathname();
   const user = useSelector(selectUserData);
+  // console.log(user);
+
+  // useEffect(() => {
+  //   console.log('Puntos del usuario actualizados:', user.points);
+  //   // Aquí puedes realizar cualquier acción que necesites con los nuevos puntos del usuario
+  // }, [user.points]);
+
 
   return (
     <div

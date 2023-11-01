@@ -26,10 +26,14 @@ import { auth, db } from "@/firebase";
 import ModalRegistration from "../successful-registration-modal/ModalRegistration";
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc } from "firebase/firestore";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUserData } from "@/redux/slices/userSlice";
 
 export default function RegisterForm() {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  // const user = useSelector(selectUserData);
+  
 
   const form = useForm({
     resolver: zodResolver(SignupFormSchema),
@@ -44,23 +48,29 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(values) {
+    console.log("Datos del usuario a almacenar:", values);
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
+  
       const user = userCredential.user;
-
+      console.log('user: ', user);
+  
       if (user) {
-
-        const userDocRef = await addDoc(collection(db, "users"), {
+        // Asignar el UID del usuario autenticado como el ID del documento en "users"
+        const userDocRef = doc(db, "users", user.uid);
+        
+        await setDoc(userDocRef, {
           first_name: values.first_name,
           last_name: values.last_name,
           born_date: values.born_date,
           email: values.email,
+          points: 500,
         });
-
+  
         console.log("Usuario creado con ID: ", user.uid);
         setIsSuccessModalVisible(true);
       }
@@ -69,6 +79,7 @@ export default function RegisterForm() {
     }
   }
 
+ 
 
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">

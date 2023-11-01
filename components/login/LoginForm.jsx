@@ -73,6 +73,7 @@ export default function LoginForm({ onRequestRecovery }) {
             JSON.stringify({
               first_name: userData.first_name,
               email: userData.email,
+              points: userData.points
             })
           );
           dispatch(
