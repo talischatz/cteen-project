@@ -8,8 +8,8 @@ export const ButtonLogout = () => {
         try {
             await auth.signOut();
             localStorage.removeItem('userData');
-            router.push('/');
             location.reload();
+            router.push('/');
             console.log('Sesión cerrada');
         } catch (error) {
             console.log('Error al cerrar sesión:', error);
