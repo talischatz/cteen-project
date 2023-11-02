@@ -1,23 +1,39 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
+import { BiLogOutCircle } from 'react-icons/bi';
+import Link from 'next/link';
 import { NavbarLinks } from '@/constants/NavbarLinks';
 import { useSelector } from 'react-redux';
 import { selectUserData } from '@/redux/slices/userSlice';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { FaFacebookSquare, FaInstagram } from 'react-icons/fa';
 import ShoppingCartModal from '../shopping-cart-modal/ShoppingCartModal';
 import ShoppingCartComponent from '../shoppingCart/ShoppingCart';
-import { ButtonLogout } from '../buttonLogaut/ButtonLogout';
+import { auth } from '@/firebase';
 
 function MobileNavbar() {
   const userData = useSelector(selectUserData);
-  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    try {
+        await auth.signOut();
+        localStorage.removeItem('userData');
+        console.log('Sesión cerrada');
+        window.location.href = '/'; // Redirige a '/'
+    } catch (error) {
+        console.log('Error al cerrar sesión:', error);
+    }
+}
+
+  const [showCartModal, setShowCartModal] = useState(false);
+
+  const pathname = useRouter().pathname;
 
   if (!userData.isAuthenticated) {
     return null;
   }
-
 
   return (
     <>
@@ -55,7 +71,11 @@ function MobileNavbar() {
           />
         </Link>
         <ShoppingCartComponent />
-        <ButtonLogout/>
+        <BiLogOutCircle
+          size={25}
+          className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
+          onClick={handleLogout}
+        />
       </div>
       <ShoppingCartModal />
     </>
