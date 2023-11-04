@@ -18,6 +18,7 @@ import BannerDoingGood from '../bannerDoingGood/BannerDoingGood';
 export default function DoingGoodForm({ onUploadSuccess }) {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [downloadURL, setDownloadURL] = useState(null); 
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
 
   const lottieRef = useRef(null);
   const form = useForm({
@@ -43,6 +44,7 @@ export default function DoingGoodForm({ onUploadSuccess }) {
       return media; 
     } catch (error) {
       console.error("Error al subir el archivo:", error);
+      setIsErrorPopupVisible(true); 
       return null;
     }
   }
@@ -70,12 +72,16 @@ export default function DoingGoodForm({ onUploadSuccess }) {
   
 
   async function onSubmit(values) {
-    const media = await uploadFile(values.upload_file[0]);
-    if (media) {
-      updateUserPoints();
-      setIsSuccessModalVisible(true);
+    if (values.upload_file && values.upload_file[0]) {
+      const media = await uploadFile(values.upload_file[0]);
+      if (media) {
+        updateUserPoints();
+        setIsSuccessModalVisible(true);
+      } else {
+        console.error("Error al subir el archivo.");
+      }
     } else {
-      console.error("Error al subir el archivo.");
+      setIsErrorPopupVisible(true); // Muestra el pop-up de error si no hay archivo cargado
     }
   }
 
@@ -139,6 +145,9 @@ export default function DoingGoodForm({ onUploadSuccess }) {
       </Form>
       {isSuccessModalVisible && (
         <BannerDoingGood onClose={() => setIsSuccessModalVisible(false)} />
+      )}
+            {isErrorPopupVisible && (
+        <ModalDoingGood onClose={() => setIsErrorPopupVisible(false)} />
       )}
     </div>
   );

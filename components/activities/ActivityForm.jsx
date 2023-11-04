@@ -25,10 +25,10 @@ import Lottie from 'lottie-react';
 import animationData from '@/public/animations/activity-animation.json';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import ModalActivities from '../successful-activities-modal/ModalActivities';
+import BannerActivities from '../bannerActivities/BannerActivities';
+
 import { auth, db } from '@/firebase';
 import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
-import BannerActivities from '../bannerActivities/BannerActivities';
 
 
 function ActivityForm() {
@@ -50,7 +50,6 @@ function ActivityForm() {
       const user = auth.currentUser;
       if (user) {
         console.log('user: ', user);
-  
         const activityData = {
           activity_name: values.activity_name,
           activity_date: values.activity_date,

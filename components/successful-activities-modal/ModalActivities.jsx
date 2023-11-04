@@ -24,10 +24,10 @@ const ModalActivities = ({ onClose }) => {
         className="bg-white p-8 rounded shadow-lg flex flex-col items-center "
       >
         <div className="flex items-center justify-between mb-4 w-full">
-          <h2 className="text-primary text-2xl font-semibold">¡Actividad creada con exito!</h2>
+          <h2 className="text-primary text-2xl font-semibold">¡Ups, no hay actividad para subir!</h2>
           <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
         </div>
-        <p>Tu actividad se guardo correctamente</p>
+        <p>Ingresa una actividad para sumar puntos 🤗</p>
         <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
           volver al inicio
         </button>

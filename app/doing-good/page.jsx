@@ -24,7 +24,7 @@ export default function DoingGoodPage() {
       // Actualizar el estado y localStorage con el nuevo medio cargado
       const updatedMedia = [...uploadedMedia, media];
       setUploadedMedia(updatedMedia);
-      localStorage.setItem("uploadedMedia", JSON.stringify(updatedMedia));
+      // localStorage.setItem("uploadedMedia", JSON.stringify(updatedMedia));
     } else {
       console.error("Error: media object is missing properties.");
     }
