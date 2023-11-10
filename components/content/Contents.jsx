@@ -34,7 +34,7 @@ import Image from "next/image";
 
 export const Contents = () => {
   return (
-    <div className="p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div className="p-4 mt-12 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
       <Image src={acercadedar} alt="acercadedar"/>
       <Image src={alturismo} alt="alturismo"/>
       <Image src={cambiar} alt="cambiar"/>
