@@ -74,7 +74,7 @@ function Calendar({ showOutsideDays = true, field, setBornDate, ...props }) {
     setSelectedDate(date);
     if (field && field.onChange) {
       setBornDate(date);
-      field.onChange(date);
+      field.onChange(date);   
     }
   };
 

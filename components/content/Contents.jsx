@@ -66,36 +66,3 @@ export const Contents = () => {
     </div>
   )
 }
-
-
-// export const Contents = () => {
-//   const videoUrls = [
-//     acercadedar,
-//     "https://www.youtube.com/embed/Qmb_EY9ZQmE",
-//     "https://www.youtube.com/embed/Qmb_EY9ZQmE",
-//     "https://www.youtube.com/embed/Qmb_EY9ZQmE",
-//     "https://www.youtube.com/embed/Qmb_EY9ZQmE",
-//     "https://www.youtube.com/embed/Qmb_EY9ZQmE",
-//   ];
-
-//   return (
-//     <div className="flex flex-wrap">
-//       {videoUrls.map((url, index) => (
-//         <div
-//           key={index}
-//           className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 p-2"
-//         >
-//           <iframe
-//             width="100%"
-//             height="315"
-//             src={url}
-//             title={`Video ${index + 1}`}
-//             frameBorder="0"
-//             allow="autoplay; encrypted-media"
-//             allowFullScreen
-//           />
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
