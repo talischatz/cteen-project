@@ -8,6 +8,7 @@ function HomeBanner() {
         alt="cteen-banner"
         className="w-full rounded"
       />
+      <h1>asd</h1>
     </div>
   );
 }

@@ -20,7 +20,7 @@ export default function ContentsPage() {
     <div>
       <div>
         <p className="text-4xl text-primary font-semibold mt-8 text-center">
-          Contenidossss
+          Contenidos
         </p>
         <Contents/>
       </div>
