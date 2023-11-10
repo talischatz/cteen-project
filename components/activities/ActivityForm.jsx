@@ -24,16 +24,17 @@ import { cn } from '@/lib/utils';
 import Lottie from 'lottie-react';
 import animationData from '@/public/animations/activity-animation.json';
 import { format } from 'date-fns';
-import { useState } from 'react';
-import BannerActivities from '../bannerActivities/BannerActivities';
-
+import { useState } from 'react'
 import { auth, db } from '@/firebase';
 import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import BannerActivities from '../bannerActivities/BannerActivities';
+import ModalActivities from '../successful-activities-modal/ModalActivities';
 
 
 function ActivityForm() {
 
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
+  const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(ActivityFormSchema),
@@ -49,7 +50,13 @@ function ActivityForm() {
     try {
       const user = auth.currentUser;
       if (user) {
-        console.log('user: ', user);
+        // Verificar si los campos del formulario están vacíos
+        if (!values.activity_name || !values.activity_date || !values.activity_leader) {
+          setIsErrorPopupVisible(true); // Mostrar el modal de error
+          return; // Salir de la función onSubmit para evitar enviar datos vacíos a Firestore
+        }
+  
+        // Guardar la actividad en Firestore
         const activityData = {
           activity_name: values.activity_name,
           activity_date: values.activity_date,
@@ -58,24 +65,17 @@ function ActivityForm() {
           email: user.email
         };
         await addDoc(collection(db, 'activities'), activityData);
-  
- 
-        const userDocRef = doc(db, 'users', user.uid);
+    
+        // Actualizar puntos del usuario en Firestore
+        const userDocRef =  doc(db, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
-        console.log('userdocSnap: ',userDocSnap);
         
         if (userDocSnap.exists()) {
-
-          console.log(userDocSnap.exists());
           const userData = userDocSnap.data();
-          console.log('userData',userData);
-          const currentPoints = userData.points
-          console.log('currentPoints',currentPoints);
-   
+          const currentPoints = userData.points;
           await updateDoc(userDocRef, {
             points: currentPoints + 500
           });
-          
           setIsSuccessModalVisible(true);
           console.log('Actividad creada y puntos actualizados.');
         } else {
@@ -86,8 +86,10 @@ function ActivityForm() {
       }
     } catch (error) {
       console.error('Error al guardar la actividad y actualizar puntos:', error);
+      setIsErrorPopupVisible(true);
     }
   }
+  
 
   return (
     <div className="w-full min-h-full h-full flex pt-4 pb-16 px-2 items-center justify-center flex-grow">
@@ -179,11 +181,12 @@ function ActivityForm() {
             )}
           />
           <div className="mt-[30px]">
-            <Button className="w-full">Registrar</Button>
+            <Button type="submit" className="w-full">Registrar</Button>
           </div>
         </form>
-      </Form>
+        </Form>
       {isSuccessModalVisible && <BannerActivities onClose={() => setIsSuccessModalVisible(false)} />}
+      {isErrorPopupVisible && <ModalActivities onClose={() => setIsErrorPopupVisible(false)} />}
     </div>
   );
 }

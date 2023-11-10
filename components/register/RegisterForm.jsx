@@ -30,10 +30,15 @@ import { addDoc, collection, doc, setDoc } from "firebase/firestore";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserData } from "@/redux/slices/userSlice";
 
+
 export default function RegisterForm() {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   // const user = useSelector(selectUserData);
-  
+  const [bornDate, setBornDate] = useState(null);
+
+  const handleBornDateChange = (date) => {
+    setBornDate(date);
+  };
 
   const form = useForm({
     resolver: zodResolver(SignupFormSchema),
@@ -142,15 +147,19 @@ export default function RegisterForm() {
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
+
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={field.onChange}
+                      onSelect={handleBornDateChange}
+                      selectedDate={bornDate}
+                      setBornDate={handleBornDateChange}
                       disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
                       }
                       initialFocus
                     />
+
                   </PopoverContent>
                 </Popover>
                 <FormMessage />

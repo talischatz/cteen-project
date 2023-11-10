@@ -5,10 +5,10 @@ import { XCircle } from 'lucide-react';
 const ModalDoingGood = ({ onClose }) => {
   const router = useRouter();
 
-  // const handleGoToHome = () => {
-  //   router.push('/home');
-  //   onClose(); 
-  // };
+  const handleGoToHome = () => {
+    router.push('/home');
+    onClose(); 
+  };
 
   return (
     <motion.div
@@ -28,9 +28,9 @@ const ModalDoingGood = ({ onClose }) => {
           <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
         </div>
         <p>Inserta un archivo multimedia para poder subirlo y ganar puntos 🤗</p>
-        {/* <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
+        <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
           volver al inicio
-        </button> */}
+        </button>
       </motion.div>
     </motion.div>
   );

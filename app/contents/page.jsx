@@ -7,17 +7,19 @@ import { loadUserFromLocalStorage } from '@/redux/slices/userSlice';
 import ReactPlayer from "react-player/youtube";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { Contents } from '@/components/content/Contents';
 
 export default function ContentsPage() {
   const dispatch = useDispatch();
-  const videoUrls = [
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-    "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
-  ];
+  
+  // const videoUrls = [
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  //   "https://www.youtube.com/watch?v=Qmb_EY9ZQmE",
+  // ];
   
   useEffect(() => {
     dispatch(loadUserFromLocalStorage());
@@ -29,21 +31,7 @@ export default function ContentsPage() {
         <p className="text-4xl text-primary font-semibold mt-8 text-center">
           Contenidos
         </p>
-      </div>
-      <div className="box h-72 bg-slate-600 text-center">
-        1
-      </div>
-      <div className="box h-72 bg-slate-600 text-center">
-        2
-      </div>
-      <div className="box h-72 bg-slate-600 text-center">
-        3
-      </div>
-      <div className="box h-72 bg-slate-600 text-center">
-        4
-      </div>
-      <div className="box h-72 bg-slate-600 text-center">
-        5
+        <Contents/>
       </div>
     </div>
   );

@@ -9,6 +9,8 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  selectedYear,
+  onYearChange,
   ...props
 }) {
   return (
@@ -57,3 +59,43 @@ function Calendar({
 Calendar.displayName = "Calendar"
 
 export { Calendar }
+
+// import React, { useState } from "react";
+// import dayjs from "dayjs";
+// import { TextField } from "@mui/material";
+// import { LocalizationProvider } from "@mui/x-date-pickers";
+// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+// import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+
+// function Calendar({ showOutsideDays = true, field, setBornDate, ...props }) {
+//   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
+
+//   const handleDateChange = (date) => {
+//     setSelectedDate(date);
+//     if (field && field.onChange) {
+//       setBornDate(date);
+//       field.onChange(date);
+//     }
+//   };
+
+//   return (
+//     <LocalizationProvider dateAdapter={AdapterDayjs}>
+//       <div>
+//         <DesktopDatePicker
+//           showOutsideDays={showOutsideDays}
+//           disableFuture
+//           label="responsive"
+//           inputFormat="MM/DD/YYYY"
+//           value={selectedDate}
+//           onChange={handleDateChange}
+//         >
+//           {(params) => <TextField {...params} />}
+//         </DesktopDatePicker>
+//       </div>
+//     </LocalizationProvider>
+//   );
+// }
+
+// Calendar.displayName = "Calendar";
+
+// export { Calendar };
