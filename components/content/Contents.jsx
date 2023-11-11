@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-
 import acercadedar from '../../public/content/acercadedar.png';
 import alturismo from '../../public/content/alturismo.png';
 import cambiar from '../../public/content/cambiar.png';
