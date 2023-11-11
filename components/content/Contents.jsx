@@ -27,6 +27,7 @@ import sobreviviente from '../../public/content/sobreviviente.png';
 import vela from '../../public/content/vela.png';
 
 
+
 const images = [
   { src: acercadedar, alt: 'acercadedar', link: 'https://open.spotify.com/episode/23qDK7KpRGjk4AsR5lwpv2?si=2bebe8b2b45a41f4' },
   { src: alturismo, alt: 'alturismo', link: 'https://open.spotify.com/episode/4rTE4KyhKdLu43x4loNT9O?si=009a6b108d2e4574' },
@@ -57,6 +58,8 @@ const images = [
   { src: sobreviviente, alt: 'sobreviviente', link: 'https://open.spotify.com/episode/4J9d67XjEOUkZGpnu8vxa5?si=aa912f6c71a74b77' },
   { src: vela, alt: 'vela', link: 'https://open.spotify.com/episode/2B6mDZ78AVvFbpDJuYybbF?si=5541f6ecf9774d46' },
 ];
+
+
 
 export const Contents = () => {
   return (
