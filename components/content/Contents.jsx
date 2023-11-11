@@ -1,8 +1,9 @@
 import React from "react";
 import Image from "next/image";
-
 import acercadedar from '../../public/content/acercadedar.png';
 import alturismo from '../../public/content/alturismo.png';
+// import cambiar from '../../public/content/cambiar.png';
+// import cansado from '../../public/content/cansado.png';
 import costoso from '../../public/content/costoso.png';
 import creciendo from '../../public/content/creciendo.png';
 import decisiones from '../../public/content/decisiones.png';
@@ -10,14 +11,16 @@ import desafiante from '../../public/content/desafiante.png';
 import destino from '../../public/content/destino.png';
 import disciplinado from '../../public/content/disciplinado.png';
 import escuela from '../../public/content/escuela.png';
+// import grandesplanes from '../../public/content/grandesplanes.png';
 import hambrientas from '../../public/content/hambrientas.png';
-import labordeamor from '../../public/content/cambiar.png';
+import labordeamor from '../../public/content/labordeamor.png';
 import maestros from '../../public/content/maestros.png';
 import manzal from '../../public/content/manzal.png';
 import nobel from '../../public/content/Nobel.png';
 import pleno from '../../public/content/pleno.png';
 import poderoso from '../../public/content/poderoso.png';
 import prefacio from '../../public/content/prefacio.png';
+// import principalobjetivo from '../../public/content/principalobjetivo.png';
 import rebe from '../../public/content/rebe.png';
 import regalo from '../../public/content/regalo.png';
 import saludable from '../../public/content/saludable.png';
@@ -26,12 +29,10 @@ import senderos from '../../public/content/senderos.png';
 import sobreviviente from '../../public/content/sobreviviente.png';
 import vela from '../../public/content/vela.png';
 
-
-
 const images = [
   { src: acercadedar, alt: 'acercadedar', link: 'https://open.spotify.com/episode/23qDK7KpRGjk4AsR5lwpv2?si=2bebe8b2b45a41f4' },
   { src: alturismo, alt: 'alturismo', link: 'https://open.spotify.com/episode/4rTE4KyhKdLu43x4loNT9O?si=009a6b108d2e4574' },
-  { src: cambiar, alt: 'cambiar', link: 'https://open.spotify.com/episode/7ifnyvo5fSgjbBCBvIXgd7?si=1e76d2fb847d460a' },
+  // { src: cambiar, alt: 'cambiar', link: 'https://open.spotify.com/episode/7ifnyvo5fSgjbBCBvIXgd7?si=1e76d2fb847d460a' },
   // { src: cansado, alt: 'cansado' },
   { src: costoso, alt: 'costoso', link: 'https://open.spotify.com/episode/6oJefGJKcwtc3pU7wC72Ta?si=c30a084a24e54233' },
   { src: creciendo, alt: 'creciendo', link: 'https://open.spotify.com/episode/2uxtmSFHaYXdxVM7Thd70H?si=f7abf9f7e4684210' },
@@ -58,8 +59,6 @@ const images = [
   { src: sobreviviente, alt: 'sobreviviente', link: 'https://open.spotify.com/episode/4J9d67XjEOUkZGpnu8vxa5?si=aa912f6c71a74b77' },
   { src: vela, alt: 'vela', link: 'https://open.spotify.com/episode/2B6mDZ78AVvFbpDJuYybbF?si=5541f6ecf9774d46' },
 ];
-
-//asdqweadasdwqae
 
 export const Contents = () => {
   return (
