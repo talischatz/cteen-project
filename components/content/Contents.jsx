@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import acercadedar from '../../public/content/acercadedar.png';
 import alturismo from '../../public/content/alturismo.png';
-// import cambiar from '../../public/content/cambiar.png';
+import cambiar from '../../public/content/cambiar.png';
 // import cansado from '../../public/content/cansado.png';
 import costoso from '../../public/content/costoso.png';
 import creciendo from '../../public/content/creciendo.png';
@@ -33,7 +33,7 @@ import vela from '../../public/content/vela.png';
 const images = [
   { src: acercadedar, alt: 'acercadedar', link: 'https://open.spotify.com/episode/23qDK7KpRGjk4AsR5lwpv2?si=2bebe8b2b45a41f4' },
   { src: alturismo, alt: 'alturismo', link: 'https://open.spotify.com/episode/4rTE4KyhKdLu43x4loNT9O?si=009a6b108d2e4574' },
-  // { src: cambiar, alt: 'cambiar', link: 'https://open.spotify.com/episode/7ifnyvo5fSgjbBCBvIXgd7?si=1e76d2fb847d460a' },
+  { src: cambiar, alt: 'cambiar', link: 'https://open.spotify.com/episode/7ifnyvo5fSgjbBCBvIXgd7?si=1e76d2fb847d460a' },
   // { src: cansado, alt: 'cansado' },
   { src: costoso, alt: 'costoso', link: 'https://open.spotify.com/episode/6oJefGJKcwtc3pU7wC72Ta?si=c30a084a24e54233' },
   { src: creciendo, alt: 'creciendo', link: 'https://open.spotify.com/episode/2uxtmSFHaYXdxVM7Thd70H?si=f7abf9f7e4684210' },
