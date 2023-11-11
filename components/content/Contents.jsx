@@ -59,7 +59,7 @@ const images = [
   { src: vela, alt: 'vela', link: 'https://open.spotify.com/episode/2B6mDZ78AVvFbpDJuYybbF?si=5541f6ecf9774d46' },
 ];
 
-
+//asdqweadasdwqae
 
 export const Contents = () => {
   return (
