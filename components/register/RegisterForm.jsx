@@ -27,18 +27,12 @@ import ModalRegistration from "../successful-registration-modal/ModalRegistratio
 import { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, doc, setDoc } from "firebase/firestore";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "@/redux/slices/userSlice";
-
 
 export default function RegisterForm() {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   // const user = useSelector(selectUserData);
-  const [bornDate, setBornDate] = useState(null);
-
-  const handleBornDateChange = (date) => {
-    setBornDate(date);
-  };
 
   const form = useForm({
     resolver: zodResolver(SignupFormSchema),
@@ -60,14 +54,14 @@ export default function RegisterForm() {
         values.email,
         values.password
       );
-  
+
       const user = userCredential.user;
-      console.log('user: ', user);
-  
+      console.log("user: ", user);
+
       if (user) {
         // Asignar el UID del usuario autenticado como el ID del documento en "users"
         const userDocRef = doc(db, "users", user.uid);
-        
+
         await setDoc(userDocRef, {
           first_name: values.first_name,
           last_name: values.last_name,
@@ -75,7 +69,7 @@ export default function RegisterForm() {
           email: values.email,
           points: 500,
         });
-  
+
         console.log("Usuario creado con ID: ", user.uid);
         setIsSuccessModalVisible(true);
       }
@@ -83,8 +77,6 @@ export default function RegisterForm() {
       console.error("Error al crear usuario: ", error);
     }
   }
-
- 
 
   return (
     <div className="w-full min-h-full h-full pt-4 px-2 flex flex-col items-start justify-between">
@@ -147,19 +139,15 @@ export default function RegisterForm() {
                     </FormControl>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-
                     <Calendar
                       mode="single"
                       selected={field.value}
-                      onSelect={handleBornDateChange}
-                      selectedDate={bornDate}
-                      setBornDate={handleBornDateChange}
+                      onSelect={(date) => form.setValue("born_date", date)}
                       disabled={(date) =>
                         date > new Date() || date < new Date("1900-01-01")
                       }
                       initialFocus
                     />
-
                   </PopoverContent>
                 </Popover>
                 <FormMessage />
