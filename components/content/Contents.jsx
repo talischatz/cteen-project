@@ -2,7 +2,7 @@ import React from "react";
 import Image from "next/image";
 import acercadedar from '../../public/content/acercadedar.png';
 import alturismo from '../../public/content/alturismo.png';
-import cambiar from '../../public/content/cambiar.png';
+// import cambiar from '../../public/content/cambiar.png';
 // import cansado from '../../public/content/cansado.png';
 import costoso from '../../public/content/costoso.png';
 import creciendo from '../../public/content/creciendo.png';
