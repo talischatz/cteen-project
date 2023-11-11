@@ -1,13 +1,13 @@
 "use client";
 
-
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { loadUserFromLocalStorage } from '@/redux/slices/userSlice'; 
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadUserFromLocalStorage } from "@/redux/slices/userSlice";
 import ReactPlayer from "react-player/youtube";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { Contents } from '@/components/content/Contents';
+import { Contents } from "@/components/content/Contents";
+import { AddPointsInContent } from "@/components/addPointsInContent/AddPointsInContent";
 
 export default function ContentsPage() {
   const dispatch = useDispatch();
@@ -17,12 +17,17 @@ export default function ContentsPage() {
   }, [dispatch]);
 
   return (
-    <div>
-      <div>
-        <p className="text-4xl text-primary font-semibold mt-8 text-center">
+    <div className="">
+      <div className="text-center">
+        <p className="text-4xl text-primary font-semibold">
           Contenidos
         </p>
-        <Contents/>
+      </div>
+      <div className="flex justify-end m-12">
+      <AddPointsInContent/>
+      </div>
+      <div>
+        <Contents />
       </div>
     </div>
   );
