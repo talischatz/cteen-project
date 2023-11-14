@@ -2,12 +2,22 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Loader2, XCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { auth, db } from '@/firebase';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import BannerContents from '../bannerContents/BannerContents';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectIsSuccessModalVisible, setSuccessModalVisible } from '@/redux/slices/bannerContentSlice';
 
 
 export const AddPointsInContent = () => {
+
+    const isSuccessModalVisible = useSelector(selectIsSuccessModalVisible);
+    const dispatch = useDispatch();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+//   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -17,9 +27,46 @@ export const AddPointsInContent = () => {
     setIsModalOpen(false);
   };
 
-  const handleConfirm = () => {
-    // Lógica para manejar la confirmación de la descripción, puedes implementarla según tus necesidades
-    // Por ejemplo, puedes enviar la descripción a una función o realizar alguna acción con ella.
+  const handleConfirm = async () => {
+    const user = auth.currentUser;
+
+    if (user) {
+      const contentData = {
+        description: description,
+        email: user.email,
+      };
+
+      try {
+        // Guardar la descripción en Firestore
+        const docRef = await addDoc(collection(db, 'contents'), contentData);
+        console.log('Document written with ID: ', docRef.id);
+
+        // Actualizar puntos del usuario en Firestore
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDocSnap = await getDoc(userDocRef);
+
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          const currentPoints = userData.points;
+
+          // Sumar 500 puntos
+          await updateDoc(userDocRef, {
+            points: currentPoints + 500,
+          });
+
+          // Mostrar el banner de éxito
+        //   setIsSuccessModalVisible(true);
+        dispatch(setSuccessModalVisible(true));
+          console.log('Descripción creada y puntos actualizados.');
+        } else {
+          console.error('El documento del usuario no existe en Firestore.');
+        }
+      } catch (error) {
+        console.error('Error al guardar la descripción y actualizar puntos:', error);
+      }
+    }
+
+    // Lógica para manejar la confirmación de la descripción
     console.log('Descripción ingresada:', description);
     handleCloseModal();
   };
@@ -77,6 +124,7 @@ export const AddPointsInContent = () => {
           </motion.div>
         </motion.div>
       )}
+       {/* {isSuccessModalVisible && <BannerContents onClose={() => setIsSuccessModalVisible(false)} />} */}
     </div>
   );
 };
