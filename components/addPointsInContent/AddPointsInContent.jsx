@@ -37,11 +37,11 @@ export const AddPointsInContent = () => {
       };
 
       try {
-        // Guardar la descripción en Firestore
+
         const docRef = await addDoc(collection(db, 'contents'), contentData);
         console.log('Document written with ID: ', docRef.id);
 
-        // Actualizar puntos del usuario en Firestore
+
         const userDocRef = doc(db, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
 
@@ -49,13 +49,10 @@ export const AddPointsInContent = () => {
           const userData = userDocSnap.data();
           const currentPoints = userData.points;
 
-          // Sumar 500 puntos
           await updateDoc(userDocRef, {
             points: currentPoints + 500,
           });
 
-          // Mostrar el banner de éxito
-        //   setIsSuccessModalVisible(true);
         dispatch(setSuccessModalVisible(true));
           console.log('Descripción creada y puntos actualizados.');
         } else {
@@ -65,9 +62,6 @@ export const AddPointsInContent = () => {
         console.error('Error al guardar la descripción y actualizar puntos:', error);
       }
     }
-
-    // Lógica para manejar la confirmación de la descripción
-    console.log('Descripción ingresada:', description);
     handleCloseModal();
   };
 
