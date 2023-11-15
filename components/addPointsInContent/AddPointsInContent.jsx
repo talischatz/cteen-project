@@ -98,7 +98,7 @@ export const AddPointsInContent = () => {
                 />
               </div>
               <div>
-                <p className="text-base text-gray-400 font-medium mt-4">Ingrese una descripción contandonos sobre el podscats que escuchaste
+                <p className="text-base text-gray-400 font-medium mt-4">Ingrese una descripción contandonos sobre el podcats que escuchaste
                 para sumar puntos ✅</p>
                 <textarea
                   type="text"
