@@ -21,14 +21,15 @@ export default function DoingGoodPage() {
   const fetchMediaFromFirebaseStorage = async () => {
     const storageRef = ref(storage, "Posts DoingGood");
     const mediaList = await listAll(storageRef);
-
+  
     const mediaData = await Promise.all(
       mediaList.items.map(async (item) => {
         const url = await getDownloadURL(item);
-        return { url };
+        const type = item.name.endsWith(".mp4") ? "video/mp4" : "image/jpeg"; // Ajusta según tus extensiones de archivos
+        return { url, type };
       })
     );
-
+  
     setUploadedMedia(mediaData);
   };
 

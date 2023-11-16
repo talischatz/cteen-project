@@ -3,6 +3,8 @@ import Image from "next/image";
 import React from "react";
 
 export const Card = ({ media, index }) => {
+  console.log("URL del medio:", media.url);
+
   return (
     <div key={index} className="m-2 bg-slate-200 p-5 rounded-md">
       {media.type && (
