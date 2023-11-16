@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { loadUserFromLocalStorage } from "@/redux/slices/userSlice";
 import DoingGoodForm from "@/components/doing-good/DoingGoodForm";
-import { Card } from "@/components/card/Card"; // Asegúrate de importar el componente Card correctamente
+import { Card } from "@/components/card/Card";
 import BannerDoingGood from "@/components/bannerDoingGood/BannerDoingGood";
+import { getDownloadURL, ref, listAll } from "firebase/storage";
+import { storage } from "@/firebase";
 
 export default function DoingGoodPage() {
   const dispatch = useDispatch();
@@ -13,26 +15,30 @@ export default function DoingGoodPage() {
 
   useEffect(() => {
     dispatch(loadUserFromLocalStorage());
-    const storedMedia = localStorage.getItem("uploadedMedia");
-    if (storedMedia) {
-      setUploadedMedia(JSON.parse(storedMedia));
-    }
+    fetchMediaFromFirebaseStorage();
   }, [dispatch]);
 
-  const handleUploadSuccess = (media) => {
-    if (media && media.type && media.url) {
-      // Actualizar el estado y localStorage con el nuevo medio cargado
-      const updatedMedia = [...uploadedMedia, media];
-      setUploadedMedia(updatedMedia);
-      // localStorage.setItem("uploadedMedia", JSON.stringify(updatedMedia));
-    } else {
-      console.error("Error: media object is missing properties.");
-    }
+  const fetchMediaFromFirebaseStorage = async () => {
+    const storageRef = ref(storage, "Posts DoingGood");
+    const mediaList = await listAll(storageRef);
+
+    const mediaData = await Promise.all(
+      mediaList.items.map(async (item) => {
+        const url = await getDownloadURL(item);
+        return { url };
+      })
+    );
+
+    setUploadedMedia(mediaData);
+  };
+
+  const handleUploadSuccess = () => {
+    // Puedes actualizar la lista de medios después de que se suba un nuevo medio
+    fetchMediaFromFirebaseStorage();
   };
 
   return (
     <div className="full-container flex flex-col">
-      {/* <BannerDoingGood/> */}
       <div className="text-4xl text-primary font-semibold mt-8 text-center">
         Doing Good
       </div>
