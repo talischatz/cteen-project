@@ -20,7 +20,7 @@ import { XCircle } from "lucide-react";
 import { useEffect } from "react";
 
 function PasswordRecoveryForm({ onValidEmail, setShowBanner, showBanner }) {
-  // <-- Añadido el prop onValidEmail
+ 
   const form = useForm({
     resolver: zodResolver(PasswordRecoverySchema),
     defaultValues: {
@@ -39,13 +39,12 @@ function PasswordRecoveryForm({ onValidEmail, setShowBanner, showBanner }) {
   const onSubmit = async (values) => {
     console.log("Email a enviar:", values.recovery_email);
     try {
-      // Enviar correo de restablecimiento de contraseña usando Firebase
+
       await sendPasswordResetEmail(auth, values.recovery_email);
-      // Correo enviado con éxito, muestra el banner y realiza otras acciones necesarias
-      // onValidEmail(values.recovery_email);
+  
       setShowBanner(true);
     } catch (error) {
-      // Maneja errores de envío de correo electrónico
+
       console.error(
         "Error al enviar el correo electrónico de restablecimiento de contraseña:",
         error

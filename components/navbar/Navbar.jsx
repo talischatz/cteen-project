@@ -26,7 +26,7 @@ function Navbar() {
         await auth.signOut();
         localStorage.removeItem('userData');
         console.log('Sesión cerrada');
-        window.location.href = '/'; // Redirige a '/'
+        window.location.href = '/'; 
     } catch (error) {
         console.log('Error al cerrar sesión:', error);
     }

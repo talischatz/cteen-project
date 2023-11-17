@@ -1,4 +1,3 @@
-// Importa Image desde 'next/image' si aún no lo has hecho
 import Image from "next/image";
 import React from "react";
 

@@ -18,7 +18,7 @@ function PointsBanner() {
       setShowPointsBanner(true);
       sessionStorage.setItem('hasShownBanner', 'true');
 
-      // Ocultar el banner después de 3500 milisegundos (3.5 segundos)
+
       setTimeout(() => {
         setShowPointsBanner(false);
       }, 5000);

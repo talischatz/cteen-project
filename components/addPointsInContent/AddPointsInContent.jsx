@@ -7,6 +7,7 @@ import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import BannerContents from '../bannerContents/BannerContents';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsSuccessModalVisible, setSuccessModalVisible } from '@/redux/slices/bannerContentSlice';
+import { setUser } from '@/redux/slices/userSlice';
 
 
 export const AddPointsInContent = () => {
@@ -37,10 +38,8 @@ export const AddPointsInContent = () => {
       };
 
       try {
-
         const docRef = await addDoc(collection(db, 'contents'), contentData);
         console.log('Document written with ID: ', docRef.id);
-
 
         const userDocRef = doc(db, 'users', user.uid);
         const userDocSnap = await getDoc(userDocRef);
@@ -48,12 +47,17 @@ export const AddPointsInContent = () => {
         if (userDocSnap.exists()) {
           const userData = userDocSnap.data();
           const currentPoints = userData.points;
+          const newPoints = currentPoints + 500;
 
-          await updateDoc(userDocRef, {
-            points: currentPoints + 500,
-          });
+          await updateDoc(userDocRef, { points: newPoints });
 
-        dispatch(setSuccessModalVisible(true));
+
+          dispatch(setUser({ ...userData, points: newPoints }));
+
+    
+          localStorage.setItem('userData', JSON.stringify({ ...userData, points: newPoints }));
+
+          dispatch(setSuccessModalVisible(true));
           console.log('Descripción creada y puntos actualizados.');
         } else {
           console.error('El documento del usuario no existe en Firestore.');
@@ -64,6 +68,7 @@ export const AddPointsInContent = () => {
     }
     handleCloseModal();
   };
+
 
   return (
     <div className="relative">

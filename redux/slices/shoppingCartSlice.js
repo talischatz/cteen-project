@@ -50,13 +50,13 @@ const shoppingCartSlice = createSlice({
   }
 })
 
-// Actions
+
 export const { setGroupedProducts, triggerShoppingCartModal, triggerCompletedPurchaseModal, removeOrDecreaseProduct, emptyCart } = shoppingCartSlice.actions
 
-// Selectors
+
 export const selectedGroupedProducts = state => state.shoppingCart.groupedProducts
 export const shoppingCartModalState = state => state.shoppingCart.shoppingCartModalIsOpened
 export const completedPurchaseModalState = state => state.shoppingCart.completedPurchaseModalIsOpened
 
-// Reducer export
+
 export default shoppingCartSlice.reducer

@@ -10,6 +10,7 @@ export default function ActivitiesPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('Cargando datos del usuario...');
     dispatch(loadUserFromLocalStorage());
   }, [dispatch]);
 

@@ -57,7 +57,7 @@ const images = [
   { src: semillasdesabiduria, alt: 'semillasdesabiduria', link: 'https://open.spotify.com/episode/0Wf51AWUNThids1SUpipZd?si=747099d4f9d64e42' },
   { src: senderos, alt: 'senderos', link: 'https://open.spotify.com/episode/5D9jdJHIBajsbkoK9xMLeQ?si=cc1a646ff3ef4137' },
   { src: sobreviviente, alt: 'sobreviviente', link: 'https://open.spotify.com/episode/4J9d67XjEOUkZGpnu8vxa5?si=aa912f6c71a74b77' },
-  { src: vela, alt: 'vela', link: 'https://open.spotify.com/episode/2B6mDZ78AVvFbpDJuYybbF?si=5541f6ecf9774d46' },
+  { src: vela, alt: 'vela', link: 'https:open.spotify.com/episode/2B6mDZ78AVvFbpDJuYybbF?si=5541f6ecf9774d46' },
 ];
 
 export const Contents = () => {

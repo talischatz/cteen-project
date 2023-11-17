@@ -25,7 +25,7 @@ export default function DoingGoodPage() {
     const mediaData = await Promise.all(
       mediaList.items.map(async (item) => {
         const url = await getDownloadURL(item);
-        const type = item.name.endsWith(".mp4") ? "video/mp4" : "image/jpeg"; // Ajusta según tus extensiones de archivos
+        const type = item.name.endsWith(".mp4") ? "video/mp4" : "image/jpeg"; 
         return { url, type };
       })
     );
@@ -34,7 +34,7 @@ export default function DoingGoodPage() {
   };
 
   const handleUploadSuccess = () => {
-    // Puedes actualizar la lista de medios después de que se suba un nuevo medio
+
     fetchMediaFromFirebaseStorage();
   };
 

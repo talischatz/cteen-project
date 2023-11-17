@@ -29,12 +29,16 @@ import { auth, db } from '@/firebase';
 import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import BannerActivities from '../bannerActivities/BannerActivities';
 import ModalActivities from '../successful-activities-modal/ModalActivities';
+import { useDispatch } from 'react-redux';
+import { setUser } from '@/redux/slices/userSlice';
 
 
 function ActivityForm() {
 
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+
+  const dispatch = useDispatch();
 
   const form = useForm({
     resolver: zodResolver(ActivityFormSchema),
@@ -46,50 +50,57 @@ function ActivityForm() {
     shouldFocusError: false,
   });
 
-  async function onSubmit(values) {
-    try {
-      const user = auth.currentUser;
-      if (user) {
-        // Verificar si los campos del formulario están vacíos
-        if (!values.activity_name || !values.activity_date || !values.activity_leader) {
-          setIsErrorPopupVisible(true); // Mostrar el modal de error
-          return; // Salir de la función onSubmit para evitar enviar datos vacíos a Firestore
-        }
-  
-        // Guardar la actividad en Firestore
-        const activityData = {
-          activity_name: values.activity_name,
-          activity_date: values.activity_date,
-          activity_leader: values.activity_leader,
-          userId: user.uid, 
-          email: user.email
-        };
-        await addDoc(collection(db, 'activities'), activityData);
-    
-        // Actualizar puntos del usuario en Firestore
-        const userDocRef =  doc(db, 'users', user.uid);
-        const userDocSnap = await getDoc(userDocRef);
-        
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          const currentPoints = userData.points;
-          await updateDoc(userDocRef, {
-            points: currentPoints + 500
-          });
-          setIsSuccessModalVisible(true);
-          console.log('Actividad creada y puntos actualizados.');
-        } else {
-          console.error('El documento del usuario no existe en Firestore.');
-        }
-      } else {
-        console.error('Usuario no autenticado');
+
+
+async function onSubmit(values) {
+  try {
+    const user = auth.currentUser;
+    if (user) {
+      
+      if (!values.activity_name || !values.activity_date || !values.activity_leader) {
+        setIsErrorPopupVisible(true); 
+        return; 
       }
-    } catch (error) {
-      console.error('Error al guardar la actividad y actualizar puntos:', error);
-      setIsErrorPopupVisible(true);
+
+      const activityData = {
+        activity_name: values.activity_name,
+        activity_date: values.activity_date,
+        activity_leader: values.activity_leader,
+        userId: user.uid, 
+        email: user.email
+      };
+      await addDoc(collection(db, 'activities'), activityData);
+
+      const userDocRef =  doc(db, 'users', user.uid);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const currentPoints = userData.points;
+        const newPoints = currentPoints + 500;
+      
+        await updateDoc(userDocRef, { points: newPoints });
+      
+    
+        dispatch(setUser({ ...userData, points: newPoints }));
+      
+    
+        localStorage.setItem('userData', JSON.stringify({ ...userData, points: newPoints }));
+      
+        setIsSuccessModalVisible(true);
+        console.log('Actividad creada y puntos actualizados.');
+      } else {
+        console.error('El documento del usuario no existe en Firestore.');
+      }
+    } else {
+      console.error('Usuario no autenticado');
     }
+  } catch (error) {
+    console.error('Error al guardar la actividad y actualizar puntos:', error);
+    setIsErrorPopupVisible(true);
   }
-  
+}
+
 
   return (
     <div className="w-full min-h-full h-full flex pt-4 pb-16 px-2 items-center justify-center flex-grow">

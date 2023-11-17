@@ -13,12 +13,16 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/firebase";
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import BannerDoingGood from '../bannerDoingGood/BannerDoingGood';
+import { setUser } from '@/redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
+
 
 
 export default function DoingGoodForm({ onUploadSuccess }) {
   const [isSuccessModalVisible, setIsSuccessModalVisible] = useState(false);
   const [downloadURL, setDownloadURL] = useState(null); 
   const [isErrorPopupVisible, setIsErrorPopupVisible] = useState(false);
+  const dispatch = useDispatch();
 
   const lottieRef = useRef(null);
   const form = useForm({
@@ -54,14 +58,20 @@ export default function DoingGoodForm({ onUploadSuccess }) {
     if (user) {
       const userDocRef = doc(db, "users", user.uid);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
-        const currentPoints = userData.points
+        const currentPoints = userData.points;
+  
         await updateDoc(userDocRef, {
           points: currentPoints + 500,
         });
-        console.log('un exito');
+
+        dispatch(setUser({ ...userData, points: currentPoints + 500 }));
+  
+        localStorage.setItem('userData', JSON.stringify({ ...userData, points: currentPoints + 500 }));
+  
+        console.log('Puntos del usuario actualizados con éxito.');
       } else {
         console.error("El documento del usuario no existe en Firestore.");
       }
@@ -81,7 +91,7 @@ export default function DoingGoodForm({ onUploadSuccess }) {
         console.error("Error al subir el archivo.");
       }
     } else {
-      setIsErrorPopupVisible(true); // Muestra el pop-up de error si no hay archivo cargado
+      setIsErrorPopupVisible(true); 
     }
   }
 
@@ -115,7 +125,7 @@ export default function DoingGoodForm({ onUploadSuccess }) {
                     placeholder="Cargar archivo"
                     type="file"
                     onChange={(e) => {
-                      // Actualiza el valor del campo upload_file cuando se selecciona un archivo
+      
                       form.setValue("upload_file", e.target.files);
                     }}
                   />

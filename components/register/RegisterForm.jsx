@@ -59,7 +59,7 @@ export default function RegisterForm() {
       console.log("user: ", user);
 
       if (user) {
-        // Asignar el UID del usuario autenticado como el ID del documento en "users"
+    
         const userDocRef = doc(db, "users", user.uid);
 
         await setDoc(userDocRef, {

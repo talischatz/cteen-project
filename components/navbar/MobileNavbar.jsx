@@ -21,7 +21,7 @@ function MobileNavbar() {
         await auth.signOut();
         localStorage.removeItem('userData');
         console.log('Sesión cerrada');
-        window.location.href = '/'; // Redirige a '/'
+        window.location.href = '/'; 
     } catch (error) {
         console.log('Error al cerrar sesión:', error);
     }
@@ -58,7 +58,7 @@ function MobileNavbar() {
         ))}
       </div>
       <div className="flex gap-4 items-center text-[#666] absolute top-4 right-4 lg:hidden">
-        <Link href="https://www.facebook.com/jabad.uruguay" target="_blank">
+        <Link href="https:www.facebook.com/jabad.uruguay" target="_blank">
           <FaFacebookSquare
             size={24}
             className="cursor-pointer hover:text-primary transition-all ease-in-out duration-300"
