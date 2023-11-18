@@ -16,6 +16,12 @@ export const SignupFormSchema = z.object({
 
   born_date: z.date({ invalid_type_error: 'La fecha de nacimiento es requerida' }).transform(string => format(string, 'P')),
 
+  address: z.string()
+  .refine(value => !!value, { message: 'La dirección es requerida' })
+  .refine(value => value.length >= 5, {
+    message: 'La dirección debe tener al menos 5 caracteres',
+  }),
+
   email: z.string()
     .refine(value => !!value, { message: 'El email es requerido' })
     .refine(value => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value), {

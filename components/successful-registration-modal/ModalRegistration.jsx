@@ -28,7 +28,7 @@ const ModalRegistration = ({ onClose }) => {
           <h2 className="text-primary text-2xl font-semibold">Registro Exitoso</h2>
           <XCircle className="text-primary cursor-pointer" size={30} onClick={onClose} />
         </div>
-        <p>Tu usuario se ha creado exitosamente. ¡Bienvenido!</p>
+        <p>Tu usuario se ha creado exitosamente ✅. ¡Bienvenido!</p>
         <button className="bg-primary text-white px-4 py-2 rounded mt-4" onClick={handleGoToHome}>
           Inicia Sesión
         </button>

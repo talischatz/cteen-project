@@ -39,6 +39,7 @@ export default function RegisterForm() {
     defaultValues: {
       first_name: "",
       last_name: "",
+      address: "",
       born_date: "",
       email: "",
       password: "",
@@ -65,6 +66,7 @@ export default function RegisterForm() {
         await setDoc(userDocRef, {
           first_name: values.first_name,
           last_name: values.last_name,
+          address: values.address,
           born_date: values.born_date,
           email: values.email,
           points: 500,
@@ -106,6 +108,19 @@ export default function RegisterForm() {
                 <FormLabel className="font-semibold">Apellido</FormLabel>
                 <FormControl>
                   <Input placeholder="Ingrese su apellido" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+                    <FormField
+            control={form.control}
+            name="address"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormLabel className="font-semibold">Dirección</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese su dirección" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -154,6 +169,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
+          
           <FormField
             control={form.control}
             name="email"
@@ -170,6 +186,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
+          
           <FormField
             control={form.control}
             name="password"
