@@ -17,6 +17,8 @@ import { cn } from '@/lib/utils';
 import { selectUserData } from '@/redux/slices/userSlice';
 import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchaseModal';
 import axiosInstance from '@/lib/axiosInstance';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { auth, db } from '@/firebase';
 
 function ShoppingCartModal() {
   const groupedProducts = useSelector(selectedGroupedProducts);
@@ -39,6 +41,49 @@ function ShoppingCartModal() {
   const onModalClose = () => {
     dispatch(triggerShoppingCartModal(false));
   };
+
+  // const onBuyConfirmation = async () => {
+  //   console.log('Se hizo clic en el botón de finalizar compra');
+  //   console.log('Total Cost:', totalCost);
+    
+  //   const user = auth.currentUser;
+  
+  //   if (user) {
+  //     setIsLoading(true);
+  
+  //     const userDocRef = doc(db, "users", user.uid);
+  
+  //     try {
+  //       // Restar los puntos del producto a los puntos actuales del usuario
+  //       await updateDoc(userDocRef, {
+  //         points: user.points - totalCost,
+  //       });
+  
+  //       // Obtener la información actualizada del usuario después de la actualización
+  //       const updatedUserDocSnap = await getDoc(userDocRef);
+  
+  //       if (updatedUserDocSnap.exists()) {
+  //         const updatedUserData = updatedUserDocSnap.data();
+  
+  //         // Utilizar setUser del userSlice para actualizar la información del usuario en el estado
+  //         dispatch(setUser(updatedUserData));
+  
+  //         setIsLoading(false);
+  //         dispatch(triggerShoppingCartModal(false));
+  //         dispatch(triggerCompletedPurchaseModal(true));
+  //       } else {
+  //         setIsLoading(false);
+  //         console.error('El documento del usuario no existe en Firestore.');
+  //       }
+  //     } catch (error) {
+  //       setIsLoading(false);
+  //       console.error('Error al restar puntos del producto:', error);
+  //     }
+  //   } else {
+  //     console.error('Usuario no autenticado');
+  //     // Puedes realizar alguna acción adicional aquí, como redirigir al usuario a la página de inicio de sesión.
+  //   }
+  // };
 
   const onBuyConfirmation = () => {
     if (totalCost <= user.points) {
