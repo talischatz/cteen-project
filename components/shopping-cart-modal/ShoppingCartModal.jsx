@@ -88,15 +88,15 @@ function ShoppingCartModal() {
                 dispatch(triggerShoppingCartModal(false));
                 dispatch(triggerCompletedPurchaseModal(true));
 
-                await handler({
-                  method: 'POST',
-                  body: JSON.stringify({
-                    email: user.email,
-                    products: groupedProducts,
-                    totalCost: totalCost,
-                    userPointsLeft: updatedPoints,
-                  }),
-                });
+                // await handler({
+                //   method: 'POST',
+                //   body: JSON.stringify({
+                //     email: user.email,
+                //     products: groupedProducts,
+                //     totalCost: totalCost,
+                //     userPointsLeft: updatedPoints,
+                //   }),
+                // });
               } else {
                 setIsLoading(false);
                 console.error('El documento del usuario no existe en Firestore.');
