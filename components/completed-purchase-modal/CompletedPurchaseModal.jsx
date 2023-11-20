@@ -18,7 +18,7 @@ function CompletedPurchaseModal({ totalCost }) {
   const user = useSelector(selectUserData);
   const dispatch = useDispatch();
 
-  const userPointsLeft = user.points - totalCost;
+  const userPointsLeft = user.points;
 
   const onCloseModalClick = () => {
     dispatch(triggerCompletedPurchaseModal(false));

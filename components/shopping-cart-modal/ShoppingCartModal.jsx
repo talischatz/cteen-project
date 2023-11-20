@@ -14,11 +14,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import ShoppingCartItem from '../shopping-cart-item/ShoppingCartItem';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { selectUserData } from '@/redux/slices/userSlice';
+import { selectUserData, setUser } from '@/redux/slices/userSlice';
 import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchaseModal';
 import axiosInstance from '@/lib/axiosInstance';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
+import handler from '@/pages/api/success-purchase';
 
 function ShoppingCartModal() {
   const groupedProducts = useSelector(selectedGroupedProducts);
@@ -36,73 +37,111 @@ function ShoppingCartModal() {
     0
   );
   const dispatch = useDispatch();
-  const user = useSelector(selectUserData);
+  // const user = useSelector(selectUserData);
 
   const onModalClose = () => {
     dispatch(triggerShoppingCartModal(false));
   };
 
-  // const onBuyConfirmation = async () => {
-  //   console.log('Se hizo clic en el botón de finalizar compra');
-  //   console.log('Total Cost:', totalCost);
-    
-  //   const user = auth.currentUser;
+  const onBuyConfirmation = async () => {
+    console.log('Se hizo clic en el botón de finalizar compra');
+    console.log('Total Cost:', totalCost);
   
-  //   if (user) {
+    const user = auth.currentUser;
+  
+    if (user) {
+      console.log('user: ',user);
+      setIsLoading(true);
+  
+      // Obtener la referencia del documento del usuario
+      const userDocRef = doc(db, "users", user.uid);
+  
+      try {
+        // Obtener la información actualizada del usuario antes de la actualización
+        const userDocSnap = await getDoc(userDocRef);
+  
+        if (userDocSnap.exists()) {
+          const userData = userDocSnap.data();
+          const currentPoints = userData.points;
+  
+          // Verificar que currentPoints sea un número antes de realizar la resta
+          if (typeof currentPoints === 'number' && !isNaN(currentPoints)) {
+            const updatedPoints = currentPoints - totalCost;
+  
+            // Verificar que updatedPoints sea un número antes de la actualización
+            if (typeof updatedPoints === 'number' && !isNaN(updatedPoints)) {
+              // Restar los puntos del producto a los puntos actuales del usuario
+              await updateDoc(userDocRef, {
+                points: updatedPoints,
+              });
+  
+              // Obtener la información actualizada del usuario después de la actualización
+              const updatedUserDocSnap = await getDoc(userDocRef);
+  
+              if (updatedUserDocSnap.exists()) {
+                const updatedUserData = updatedUserDocSnap.data();
+  
+                // Utilizar setUser del userSlice para actualizar la información del usuario en el estado
+                dispatch(setUser(updatedUserData));
+  
+                setIsLoading(false);
+                dispatch(triggerShoppingCartModal(false));
+                dispatch(triggerCompletedPurchaseModal(true));
+
+                await handler({
+                  method: 'POST',
+                  body: JSON.stringify({
+                    email: user.email,
+                    products: groupedProducts,
+                    totalCost: totalCost,
+                    userPointsLeft: updatedPoints,
+                  }),
+                });
+              } else {
+                setIsLoading(false);
+                console.error('El documento del usuario no existe en Firestore.');
+              }
+            } else {
+              setIsLoading(false);
+              console.error('La resta de puntos no produjo un número válido.');
+            }
+          } else {
+            setIsLoading(false);
+            console.error('Los puntos actuales del usuario no son un número válido.');
+          }
+        } else {
+          setIsLoading(false);
+          console.error('El documento del usuario no existe en Firestore.');
+        }
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error al restar puntos del producto:', error);
+      }
+    } else {
+      console.error('Usuario no autenticado');
+      // Puedes realizar alguna acción adicional aquí, como redirigir al usuario a la página de inicio de sesión.
+    }
+  };
+  
+
+  // const onBuyConfirmation = () => {
+  //   if (totalCost <= user.points) {
   //     setIsLoading(true);
-  
-  //     const userDocRef = doc(db, "users", user.uid);
-  
-  //     try {
-  //       // Restar los puntos del producto a los puntos actuales del usuario
-  //       await updateDoc(userDocRef, {
-  //         points: user.points - totalCost,
-  //       });
-  
-  //       // Obtener la información actualizada del usuario después de la actualización
-  //       const updatedUserDocSnap = await getDoc(userDocRef);
-  
-  //       if (updatedUserDocSnap.exists()) {
-  //         const updatedUserData = updatedUserDocSnap.data();
-  
-  //         // Utilizar setUser del userSlice para actualizar la información del usuario en el estado
-  //         dispatch(setUser(updatedUserData));
-  
+  //     axiosInstance
+  //       .post('/success-purchase', {
+  //         email: user.email,
+  //         products: groupedProducts,
+  //         userPointsLeft: user.points - totalCost,
+  //         totalCost,
+  //       })
+  //       .then((res) => {
   //         setIsLoading(false);
   //         dispatch(triggerShoppingCartModal(false));
   //         dispatch(triggerCompletedPurchaseModal(true));
-  //       } else {
-  //         setIsLoading(false);
-  //         console.error('El documento del usuario no existe en Firestore.');
-  //       }
-  //     } catch (error) {
-  //       setIsLoading(false);
-  //       console.error('Error al restar puntos del producto:', error);
-  //     }
-  //   } else {
-  //     console.error('Usuario no autenticado');
-  //     // Puedes realizar alguna acción adicional aquí, como redirigir al usuario a la página de inicio de sesión.
-  //   }
+  //       });
+  //   } else setShowInsuficientBanner(true);
+  //   console.log(groupedProducts);
   // };
-
-  const onBuyConfirmation = () => {
-    if (totalCost <= user.points) {
-      setIsLoading(true);
-      axiosInstance
-        .post('/success-purchase', {
-          email: user.email,
-          products: groupedProducts,
-          userPointsLeft: user.points - totalCost,
-          totalCost,
-        })
-        .then((res) => {
-          setIsLoading(false);
-          dispatch(triggerShoppingCartModal(false));
-          dispatch(triggerCompletedPurchaseModal(true));
-        });
-    } else setShowInsuficientBanner(true);
-    console.log(groupedProducts);
-  };
 
   return (
     <AnimatePresence>
