@@ -19,7 +19,6 @@ import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchas
 import axiosInstance from '@/lib/axiosInstance';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
-import handler from '@/pages/api/success-purchase';
 
 function ShoppingCartModal() {
   const groupedProducts = useSelector(selectedGroupedProducts);
@@ -87,16 +86,6 @@ function ShoppingCartModal() {
                 setIsLoading(false);
                 dispatch(triggerShoppingCartModal(false));
                 dispatch(triggerCompletedPurchaseModal(true));
-
-                // await handler({
-                //   method: 'POST',
-                //   body: JSON.stringify({
-                //     email: user.email,
-                //     products: groupedProducts,
-                //     totalCost: totalCost,
-                //     userPointsLeft: updatedPoints,
-                //   }),
-                // });
               } else {
                 setIsLoading(false);
                 console.error('El documento del usuario no existe en Firestore.');
