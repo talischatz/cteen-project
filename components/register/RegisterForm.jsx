@@ -60,6 +60,7 @@ export default function RegisterForm() {
       console.log("user: ", user);
 
       if (user) {
+    
         const userDocRef = doc(db, "users", user.uid);
 
         await setDoc(userDocRef, {
@@ -112,7 +113,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-          <FormField
+                    <FormField
             control={form.control}
             name="address"
             render={({ field }) => (
@@ -129,22 +130,46 @@ export default function RegisterForm() {
             control={form.control}
             name="born_date"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="flex flex-col w-full">
                 <FormLabel className="font-semibold">
                   Fecha de nacimiento
                 </FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Ingrese su fecha de nacimiento"
-                    {...field}
-                  />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full pl-3 text-left font-normal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-0",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, "P")
+                        ) : (
+                          <span>Elige una fecha</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={(date) => form.setValue("born_date", date)}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}
           />
-
+          
           <FormField
             control={form.control}
             name="email"
@@ -161,7 +186,7 @@ export default function RegisterForm() {
               </FormItem>
             )}
           />
-
+          
           <FormField
             control={form.control}
             name="password"

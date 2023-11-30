@@ -1,4 +1,4 @@
-{
+ {
   "name": "cteen-project",
   "version": "0.1.0",
   "private": true,
@@ -38,7 +38,7 @@
     "lottie-react": "^2.4.0",
     "lucide-react": "^0.268.0",
     "next": "13.4.19",
-    "nodemailer": "^6.9.4",
+    "nodemailer": "^6.9.7",
     "postcss": "8.4.28",
     "react": "18.2.0",
     "react-day-picker": "^8.8.1",

@@ -17,7 +17,7 @@ import { cn } from '@/lib/utils';
 import { selectUserData, setUser } from '@/redux/slices/userSlice';
 import CompletedPurchaseModal from '../completed-purchase-modal/CompletedPurchaseModal';
 import axiosInstance from '@/lib/axiosInstance';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase';
 
 function ShoppingCartModal() {
@@ -42,95 +42,106 @@ function ShoppingCartModal() {
     dispatch(triggerShoppingCartModal(false));
   };
 
+  const updateUserPoints = async (userDocRef, points) => {
+    try {
+      await updateDoc(userDocRef, { points });
+      const updatedUserDocSnap = await getDoc(userDocRef);
+  
+      if (updatedUserDocSnap.exists()) {
+        const updatedUserData = updatedUserDocSnap.data();
+        dispatch(setUser(updatedUserData));
+        return true;
+      } else {
+        console.error('El documento del usuario no existe en Firestore.');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error al actualizar puntos del usuario:', error);
+      return false;
+    }
+  };
+  
+  const deductPoints = async (userDocRef, currentPoints, totalCost) => {
+    const updatedPoints = currentPoints - totalCost;
+  
+    if (typeof updatedPoints === 'number' && !isNaN(updatedPoints)) {
+      return await updateUserPoints(userDocRef, updatedPoints);
+    } else {
+      console.error('La resta de puntos no produjo un número válido.');
+      return false;
+    }
+  };
+  
+  const handleBuyConfirmation = async (userEmail) => {
+    setIsLoading(true);
+  
+    const userDocRef = doc(db, 'users', auth.currentUser.uid);
+  
+    try {
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+        const currentPoints = userData.points;
+  
+        if (typeof currentPoints === 'number' && !isNaN(currentPoints)) {
+          const success = await deductPoints(userDocRef, currentPoints, totalCost);
+  
+          if (success) {
+            setIsLoading(false);
+            dispatch(triggerShoppingCartModal(false));
+            dispatch(triggerCompletedPurchaseModal(true));
+  
+            // Envía la solicitud HTTP a tu función de Cloud Functions
+            await fetch('https://us-central1-cteen-proyect-1f6bf.cloudfunctions.net/sendConfirmationEmail', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                userEmail,
+                totalCost,
+              }),
+            });
+          } else {
+            setIsLoading(false);
+          }
+        } else {
+          setIsLoading(false);
+          console.error('Los puntos actuales del usuario no son un número válido.');
+        }
+      } else {
+        setIsLoading(false);
+        console.error('El documento del usuario no existe en Firestore.');
+      }
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Error al obtener información del usuario:', error);
+    }
+  };
+  
+  
   const onBuyConfirmation = async () => {
     console.log('Se hizo clic en el botón de finalizar compra');
     console.log('Total Cost:', totalCost);
   
-    const user = auth.currentUser;
+    setShowInsuficientBanner(false);
   
-    if (user) {
-      console.log('user: ',user);
-      setIsLoading(true);
+    try {
+      // Obtiene el usuario autenticado
+      const user = auth.currentUser;
   
-      // Obtener la referencia del documento del usuario
-      const userDocRef = doc(db, "users", user.uid);
-  
-      try {
-        // Obtener la información actualizada del usuario antes de la actualización
-        const userDocSnap = await getDoc(userDocRef);
-  
-        if (userDocSnap.exists()) {
-          const userData = userDocSnap.data();
-          const currentPoints = userData.points;
-  
-          // Verificar que currentPoints sea un número antes de realizar la resta
-          if (typeof currentPoints === 'number' && !isNaN(currentPoints)) {
-            const updatedPoints = currentPoints - totalCost;
-  
-            // Verificar que updatedPoints sea un número antes de la actualización
-            if (typeof updatedPoints === 'number' && !isNaN(updatedPoints)) {
-              // Restar los puntos del producto a los puntos actuales del usuario
-              await updateDoc(userDocRef, {
-                points: updatedPoints,
-              });
-  
-              // Obtener la información actualizada del usuario después de la actualización
-              const updatedUserDocSnap = await getDoc(userDocRef);
-  
-              if (updatedUserDocSnap.exists()) {
-                const updatedUserData = updatedUserDocSnap.data();
-  
-                // Utilizar setUser del userSlice para actualizar la información del usuario en el estado
-                dispatch(setUser(updatedUserData));
-  
-                setIsLoading(false);
-                dispatch(triggerShoppingCartModal(false));
-                dispatch(triggerCompletedPurchaseModal(true));
-              } else {
-                setIsLoading(false);
-                console.error('El documento del usuario no existe en Firestore.');
-              }
-            } else {
-              setIsLoading(false);
-              console.error('La resta de puntos no produjo un número válido.');
-            }
-          } else {
-            setIsLoading(false);
-            console.error('Los puntos actuales del usuario no son un número válido.');
-          }
-        } else {
-          setIsLoading(false);
-          console.error('El documento del usuario no existe en Firestore.');
-        }
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error al restar puntos del producto:', error);
+      if (user) {
+        // Llama a la función handleBuyConfirmation pasando el correo electrónico
+        await handleBuyConfirmation(user.email);
+      } else {
+        console.error('Usuario no autenticado');
       }
-    } else {
-      console.error('Usuario no autenticado');
-      // Puedes realizar alguna acción adicional aquí, como redirigir al usuario a la página de inicio de sesión.
+    } catch (error) {
+      console.error('Error al confirmar la compra:', error);
     }
   };
   
-
-  // const onBuyConfirmation = () => {
-  //   if (totalCost <= user.points) {
-  //     setIsLoading(true);
-  //     axiosInstance
-  //       .post('/success-purchase', {
-  //         email: user.email,
-  //         products: groupedProducts,
-  //         userPointsLeft: user.points - totalCost,
-  //         totalCost,
-  //       })
-  //       .then((res) => {
-  //         setIsLoading(false);
-  //         dispatch(triggerShoppingCartModal(false));
-  //         dispatch(triggerCompletedPurchaseModal(true));
-  //       });
-  //   } else setShowInsuficientBanner(true);
-  //   console.log(groupedProducts);
-  // };
 
   return (
     <AnimatePresence>

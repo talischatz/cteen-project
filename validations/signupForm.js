@@ -14,14 +14,7 @@ export const SignupFormSchema = z.object({
       message: 'El apellido debe tener al menos 2 caracteres',
     }),
 
-    born_date: z.string().refine((string) => {
-      // Verifica que la longitud sea de 10 caracteres
-      return string.length < 15;
-    }, { message: 'La fecha de nacimiento debe tener 10 caracteres' }).transform((string) => {
-      // Transforma el string de fecha al formato deseado
-      const parsedDate = new Date(string);
-      return format(parsedDate, 'yyyy-MM-dd'); // Ajusta el formato según tus necesidades
-    }),
+  born_date: z.date({ invalid_type_error: 'La fecha de nacimiento es requerida' }).transform(string => format(string, 'P')),
 
   address: z.string()
   .refine(value => !!value, { message: 'La dirección es requerida' })
