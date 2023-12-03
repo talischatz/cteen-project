@@ -1,5 +1,20 @@
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import * as z from 'zod';
+
+const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+
+const birthDateValidator = z.string()
+  .refine(value => dateRegex.test(value), {
+    message: 'La fecha de nacimiento debe tener el formato DD/MM/YYYY',
+  })
+  .refine(value => {
+    try {
+      parse(value, 'dd/MM/yyyy', new Date());
+      return true;
+    } catch (error) {
+      return false;
+    }
+  });
 
 export const SignupFormSchema = z.object({
   first_name: z.string()
@@ -14,13 +29,13 @@ export const SignupFormSchema = z.object({
       message: 'El apellido debe tener al menos 2 caracteres',
     }),
 
-  born_date: z.date({ invalid_type_error: 'La fecha de nacimiento es requerida' }).transform(string => format(string, 'P')),
+  born_date: birthDateValidator,
 
   address: z.string()
-  .refine(value => !!value, { message: 'La dirección es requerida' })
-  .refine(value => value.length >= 5, {
-    message: 'La dirección debe tener al menos 5 caracteres',
-  }),
+    .refine(value => !!value, { message: 'La dirección es requerida' })
+    .refine(value => value.length >= 5, {
+      message: 'La dirección debe tener al menos 5 caracteres',
+    }),
 
   email: z.string()
     .refine(value => !!value, { message: 'El email es requerido' })

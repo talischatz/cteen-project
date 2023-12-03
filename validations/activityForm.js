@@ -1,5 +1,21 @@
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import * as z from 'zod';
+
+const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+
+const activityDateValidator = z.string()
+  .refine(value => dateRegex.test(value), {
+    message: 'La fecha de la actividad debe tener el formato DD/MM/YYYY',
+  })
+  .refine(value => {
+    try {
+      // Intentar analizar la fecha para asegurarse de que es válida
+      parse(value, 'dd/MM/yyyy', new Date());
+      return true;
+    } catch (error) {
+      return false;
+    }
+  });
 
 export const ActivityFormSchema = z.object({
   activity_name: z.string()
@@ -10,9 +26,9 @@ export const ActivityFormSchema = z.object({
     .refine(value => value.length <= 30, {
       message: 'El nombre de la actividad debe tener como máximo 30 caracteres',
     }),
-  activity_date: z.date({ invalid_type_error: 'La fecha de la actividad es requerida' }).transform(string => format(string, 'P')),
+  activity_date: activityDateValidator,
   activity_leader: z.string()
-    .refine(value => !!value, { message: 'El nombre del lider de la actividad es requerido' })
+    .refine(value => !!value, { message: 'El nombre del líder de la actividad es requerido' })
     .refine(value => value.length >= 2, {
       message: 'El nombre de la actividad debe tener al menos 2 caracteres',
     })
