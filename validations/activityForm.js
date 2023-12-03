@@ -9,7 +9,6 @@ const activityDateValidator = z.string()
   })
   .refine(value => {
     try {
-      // Intentar analizar la fecha para asegurarse de que es válida
       parse(value, 'dd/MM/yyyy', new Date());
       return true;
     } catch (error) {

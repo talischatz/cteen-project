@@ -5,7 +5,7 @@ export const Card = ({ media, index }) => {
   console.log("URL del medio:", media.url);
 
   return (
-    <div key={index} className="m-2 bg-slate-200 p-5 rounded-md">
+    <div key={index} className="m-2 bg-slate-500 p-5 rounded-md">
       {media.type && (
         <>
           {media.type.startsWith("image/") ? (
