@@ -29,12 +29,12 @@ function PasswordRecoveryForm({ onValidEmail, setShowBanner, showBanner }) {
     shouldFocusError: false,
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      setShowBanner(false);
-      window.location.reload();
-    }, 8000); 
-  }, [setShowBanner]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setShowBanner(false);
+  //     window.location.reload();
+  //   }, 8000); 
+  // }, [setShowBanner]);
 
   const onSubmit = async (values) => {
     console.log("Email a enviar:", values.recovery_email);
