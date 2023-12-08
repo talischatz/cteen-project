@@ -79,10 +79,13 @@ function ShoppingCartModal() {
   
     try {
       const userDocSnap = await getDoc(userDocRef);
+    
   
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const currentPoints = userData.points;
+        const name = userData.first_name;
+        const address = userData.address;
   
         if (typeof currentPoints === 'number' && !isNaN(currentPoints)) {
           const success = await deductPoints(userDocRef, currentPoints, totalCost);
@@ -93,7 +96,7 @@ function ShoppingCartModal() {
             dispatch(triggerCompletedPurchaseModal(true));
   
             // Envía la solicitud HTTP a tu función de Cloud Functions
-            await fetch('https://us-central1-cteen-proyect-1f6bf.cloudfunctions.net/sendConfirmationEmail', {
+            await fetch('https://console.firebase.google.com/project/cteen-proyect-1f6bf/overview', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -101,6 +104,8 @@ function ShoppingCartModal() {
               body: JSON.stringify({
                 userEmail,
                 totalCost,
+                name,
+                address,
               }),
             });
           } else {
