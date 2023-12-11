@@ -96,7 +96,7 @@ function ShoppingCartModal() {
             dispatch(triggerCompletedPurchaseModal(true));
   
             // Envía la solicitud HTTP a tu función de Cloud Functions
-            await fetch('http://127.0.0.1:5001/cteen-proyect-1f6bf/us-central1/sendConfirmationEmail', {
+            await fetch('https://console.firebase.google.com/project/cteen-proyect-1f6bf/overview', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
