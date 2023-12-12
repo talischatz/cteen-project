@@ -111,6 +111,7 @@ function ShoppingCartModal() {
                 totalCost,
                 name,
                 address,
+                products: groupedProducts,
               }),
             });
           } else {
