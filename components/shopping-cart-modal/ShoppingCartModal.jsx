@@ -50,6 +50,7 @@ function ShoppingCartModal() {
       if (updatedUserDocSnap.exists()) {
         const updatedUserData = updatedUserDocSnap.data();
         dispatch(setUser(updatedUserData));
+        localStorage.setItem('userData', JSON.stringify(updatedUserData));
         return true;
       } else {
         console.error('El documento del usuario no existe en Firestore.');
