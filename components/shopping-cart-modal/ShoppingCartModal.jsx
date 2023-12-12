@@ -79,13 +79,18 @@ function ShoppingCartModal() {
   
     try {
       const userDocSnap = await getDoc(userDocRef);
-    
   
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const currentPoints = userData.points;
         const name = userData.first_name;
         const address = userData.address;
+  
+        if (currentPoints === 0) {
+          console.error('No tienes suficientes puntos para realizar una compra.');
+          setIsLoading(false);
+          return;
+        }
   
         if (typeof currentPoints === 'number' && !isNaN(currentPoints)) {
           const success = await deductPoints(userDocRef, currentPoints, totalCost);
